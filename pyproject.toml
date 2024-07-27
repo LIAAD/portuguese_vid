@@ -8,19 +8,23 @@ description = "Identify the variety of Portuguese used in a text."
 readme = "README.md"
 version = "0.0.1"
 dependencies = [
-    'pandas',
-    'datasets',
-    'zstandard',
-    'clean-text[gpl]',
-    'fasttext-langdetect',
-    'numpy',
-    'tqdm',
-    'imbalanced-learn',
-    'spacy[cuda11x]',
-    'evaluate',
-    'nltk',
-    'transformers',
-    'torch'
+    "accelerate>=0.27.0",
+    "torch>=2.2.1",
+    "transformers>=4.38.1",
+    "datasets>=2.17.1",
+    "pandas>=2.2.1",
+    "tqdm>=4.66.2",
+    "huggingface_hub>=0.21.3",
+    "evaluate>=0.4.1",
+    "pytest>=8.0.2",
+    "evaluate>=0.4.1",
+    "scikit-learn>=1.4.1",
+    "environs>=10.3.0",
+    "beautifulsoup4>=4.12.3",
+    "zstandard>=0.22.0",
+    "lxml>=5.2.1",
+    "cleantext>=1.1.4",
+    "fasttext-langdetect>=1.0.5",
 ]
 
 requires-python = "~=3.11"
