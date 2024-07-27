@@ -42,7 +42,7 @@ class Run:
         f = open(os.path.join(self.CURRENT_PATH, "in", "params.json"), "r", encoding="utf-8")
 
         # Fail if params.json does not exist
-        if f == None:
+        if f is None:
             raise FileNotFoundError("params.json not found")
 
         dict_obj = json.load(f)
@@ -60,5 +60,4 @@ class Run:
 
 if __name__ == "__main__":
     runner = Run(dataset_name="arubenruben/portuguese-language-identification-splitted")
-
     runner.tune()

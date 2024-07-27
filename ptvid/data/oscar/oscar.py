@@ -119,12 +119,10 @@ def parse():
 
             if idx % 10_000 == 0 and idx != 0:
                 print(f"Processed {idx} rows | filename: {filename}")
-                print(f"Finished {
-                      len(list_results['text'])} rows | filename: {filename}")
+                print(f"Finished {len(list_results['text'])} rows | filename: {filename}")
 
             if len(list_results['text']) >= 100_000:
-                print(f"Finished {
-                      len(list_results['text'])} rows | filename: {filename}")
+                print(f"Finished {len(list_results['text'])} rows | filename: {filename}")
                 df = pd.concat([df, pd.DataFrame(list_results)],
                                ignore_index=True)
                 df.to_csv(os.path.join(CURRENT_PATH, 'out', filename))

@@ -57,7 +57,7 @@ class Trainer:
             logging.info(f"Epoch {epoch} Loss: {loss}")
 
             if loss < 0.1:
-                logging.info(f"Loss is too low, stoping training...")
+                logging.info("Loss is too low, stopping training...")
                 break
 
         # TODO: Return Training metrics
