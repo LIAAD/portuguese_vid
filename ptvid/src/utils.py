@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 
 def setup_logger(CURRENT_PATH, CURRENT_TIME):

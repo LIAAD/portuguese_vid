@@ -1,6 +1,6 @@
-import os
 import json
 import math
+import os
 
 
 class Results:

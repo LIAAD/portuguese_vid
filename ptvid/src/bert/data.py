@@ -1,7 +1,6 @@
-import torch
-from transformers import BertTokenizerFast
 from pt_variety_identifier.src.data import Data as BaseData
 from torch.utils.data import DataLoader
+from transformers import BertTokenizerFast
 
 
 class Data(BaseData):

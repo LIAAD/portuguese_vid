@@ -1,9 +1,9 @@
-from datasets import load_dataset, concatenate_datasets, DatasetDict, Dataset
 import logging
+
+import pandas as pd
+from datasets import Dataset, concatenate_datasets, load_dataset
 from imblearn.under_sampling import RandomUnderSampler
-import pandas as pd
 from pt_variety_identifier.src.delexicalizer import Delexicalizer
-import pandas as pd
 
 
 class Data:

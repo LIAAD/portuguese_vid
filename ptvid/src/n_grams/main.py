@@ -1,13 +1,14 @@
+import json
 import os
 from time import time
-import json
+
 from pt_variety_identifier.src.data import Data
 from pt_variety_identifier.src.n_grams.results import Results
-from pt_variety_identifier.src.n_grams.trainer import Trainer
 from pt_variety_identifier.src.n_grams.tester import Tester
-from tqdm import tqdm
-from pt_variety_identifier.src.utils import setup_logger, create_output_dir
+from pt_variety_identifier.src.n_grams.trainer import Trainer
 from pt_variety_identifier.src.tunning import Tunning
+from pt_variety_identifier.src.utils import create_output_dir, setup_logger
+from tqdm import tqdm
 
 
 class Run:

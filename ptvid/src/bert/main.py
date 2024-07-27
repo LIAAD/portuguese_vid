@@ -1,14 +1,15 @@
-import torch
 import os
-from time import time
-from pt_variety_identifier.src.utils import setup_logger, create_output_dir
-from pt_variety_identifier.src.bert.data import Data
-from tqdm import tqdm
-from pt_variety_identifier.src.tunning import Tunning
-from pt_variety_identifier.src.bert.trainer import Trainer
-from pt_variety_identifier.src.bert.tester import Tester
-from pt_variety_identifier.src.bert.results import Results
 from multiprocessing import Process
+from time import time
+
+import torch
+from pt_variety_identifier.src.bert.data import Data
+from pt_variety_identifier.src.bert.results import Results
+from pt_variety_identifier.src.bert.tester import Tester
+from pt_variety_identifier.src.bert.trainer import Trainer
+from pt_variety_identifier.src.tunning import Tunning
+from pt_variety_identifier.src.utils import create_output_dir, setup_logger
+from tqdm import tqdm
 
 
 class Run:

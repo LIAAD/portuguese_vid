@@ -1,8 +1,9 @@
-from pt_variety_identifier.src.results import Results as BaseResults
 import logging
 import os
-from joblib import dump
+
 import pandas as pd
+from joblib import dump
+from pt_variety_identifier.src.results import Results as BaseResults
 
 
 class Results(BaseResults):

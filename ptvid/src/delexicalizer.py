@@ -1,5 +1,6 @@
-import spacy
 import random
+
+import spacy
 
 
 class Delexicalizer:

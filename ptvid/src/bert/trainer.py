@@ -1,8 +1,8 @@
-import torch
-from transformers import BertModel
-from tqdm import tqdm
 import logging
+
+import torch
 from pt_variety_identifier.src.bert.model import LanguageIdentfier
+from tqdm import tqdm
 
 
 class Trainer:

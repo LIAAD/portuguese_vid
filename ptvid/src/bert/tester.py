@@ -1,7 +1,8 @@
-import torch
-import evaluate
-from tqdm import tqdm
 import logging
+
+import evaluate
+import torch
+from tqdm import tqdm
 
 
 class Tester:

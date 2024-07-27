@@ -1,12 +1,12 @@
-from sklearn.naive_bayes import MultinomialNB, BernoulliNB
-from sklearn.model_selection import RandomizedSearchCV
-from sklearn.model_selection import StratifiedKFold
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
-import nltk
-from nltk.tokenize import word_tokenize
-import numpy as np
 import logging
+
+import nltk
+import numpy as np
+from nltk.tokenize import word_tokenize
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold
+from sklearn.naive_bayes import BernoulliNB
+from sklearn.pipeline import Pipeline
 
 
 class Trainer:
