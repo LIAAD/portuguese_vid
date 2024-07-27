@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 from datasets import Dataset, concatenate_datasets, load_dataset
 from imblearn.under_sampling import RandomUnderSampler
-from pt_variety_identifier.src.delexicalizer import Delexicalizer
+from ptvid.src.delexicalizer import Delexicalizer
 
 
 class Data:

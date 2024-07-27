@@ -1,7 +1,7 @@
 import logging
 
 import torch
-from pt_variety_identifier.src.bert.model import LanguageIdentfier
+from ptvid.src.bert.model import LanguageIdentfier
 from tqdm import tqdm
 
 

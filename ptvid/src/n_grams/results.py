@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 from joblib import dump
-from pt_variety_identifier.src.results import Results as BaseResults
+from ptvid.src.results import Results as BaseResults
 
 
 class Results(BaseResults):

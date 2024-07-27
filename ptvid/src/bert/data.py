@@ -1,4 +1,4 @@
-from pt_variety_identifier.src.data import Data as BaseData
+from ptvid.src.data import Data as BaseData
 from torch.utils.data import DataLoader
 from transformers import BertTokenizerFast
 

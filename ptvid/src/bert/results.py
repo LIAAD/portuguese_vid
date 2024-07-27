@@ -1,6 +1,6 @@
 import logging
 
-from pt_variety_identifier.src.results import Results as BaseResults
+from ptvid.src.results import Results as BaseResults
 
 
 class Results(BaseResults):
