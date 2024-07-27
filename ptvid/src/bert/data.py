@@ -13,20 +13,20 @@ class Data(BaseData):
         self.batch_size = batch_size
 
     def _tokenize(self, example):
-        return self.tokenizer(example['text'], padding='max_length', truncation=True, max_length=512)
+        return self.tokenizer(example["text"], padding="max_length", truncation=True, max_length=512)
 
     def _adapt_dataset(self, dataset):
         dataset = dataset.map(self._tokenize, batched=True)
 
         # Set the tensor type and the columns which the dataset should return
-        dataset.set_format(type='torch', columns=[
-                           'input_ids', 'attention_mask', 'label'])
+        dataset.set_format(type="torch", columns=["input_ids", "attention_mask", "label"])
 
         return DataLoader(dataset, batch_size=self.batch_size)
 
     def load_domain(self, domain, balance, pos_prob, ner_prob, sample_size=None):
-        dataset = super().load_domain(domain=domain, balance=balance,
-                                      pos_prob=pos_prob, ner_prob=ner_prob, sample_size=sample_size)
+        dataset = super().load_domain(
+            domain=domain, balance=balance, pos_prob=pos_prob, ner_prob=ner_prob, sample_size=sample_size
+        )
 
         return self._adapt_dataset(dataset)
 

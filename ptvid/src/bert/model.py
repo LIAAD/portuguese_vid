@@ -8,8 +8,7 @@ class LanguageIdentfier(torch.nn.Module):
         self.model = BertModel.from_pretrained(model_name)
         self.dropout = torch.nn.Dropout(0.1)
 
-        self.linear = torch.nn.Linear(
-            self.model.config.hidden_size, 1)
+        self.linear = torch.nn.Linear(self.model.config.hidden_size, 1)
 
         self.sigmoid = torch.nn.Sigmoid()
 

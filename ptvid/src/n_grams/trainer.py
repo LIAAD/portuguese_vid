@@ -9,21 +9,23 @@ import numpy as np
 import logging
 
 
-
 class Trainer:
     def __init__(self, train_dataset, params, n_iter=500) -> None:
-
         nltk.download("stopwords")
         nltk.download("punkt")
 
-        self.pipeline = Pipeline([
-            ('tfidf', TfidfVectorizer(
-                tokenizer=lambda text: word_tokenize(
-                    text, language='portuguese'),
-                stop_words=nltk.corpus.stopwords.words('portuguese')
-            )),
-            ('clf', BernoulliNB())
-        ])
+        self.pipeline = Pipeline(
+            [
+                (
+                    "tfidf",
+                    TfidfVectorizer(
+                        tokenizer=lambda text: word_tokenize(text, language="portuguese"),
+                        stop_words=nltk.corpus.stopwords.words("portuguese"),
+                    ),
+                ),
+                ("clf", BernoulliNB()),
+            ]
+        )
 
         self.params = params
         self.n_iter = n_iter
@@ -33,11 +35,11 @@ class Trainer:
         self.search = RandomizedSearchCV(
             self.pipeline,
             self.params,
-            scoring='f1_macro',
+            scoring="f1_macro",
             n_jobs=-1,
             n_iter=self.n_iter,
             cv=self.cv,
-            error_score='raise'
+            error_score="raise",
         )
 
         self.train_dataset = train_dataset
@@ -45,8 +47,7 @@ class Trainer:
     def train(self):
         logging.info("Training model...")
 
-        results = self.search.fit(
-            np.array(self.train_dataset['text']), np.array(self.train_dataset['label']))
+        results = self.search.fit(np.array(self.train_dataset["text"]), np.array(self.train_dataset["label"]))
 
         logging.info("Training finished!")
 

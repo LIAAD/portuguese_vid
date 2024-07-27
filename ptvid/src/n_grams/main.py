@@ -20,18 +20,25 @@ class Run:
         setup_logger(self.CURRENT_PATH, self.CURRENT_TIME)
 
         self.data = Data(dataset_name)
-        self._DOMAINS = ['literature', 'journalistic',
-                         'legal', 'politics', 'web', 'social_media']
+        self._DOMAINS = ["literature", "journalistic", "legal", "politics", "web", "social_media"]
 
         # Enable progress bar for pandas
         tqdm.pandas()
 
-        self.tuner = Tunning(self.data, self._DOMAINS, Results, Trainer, Tester, sample_size=5_000, CURRENT_PATH=self.CURRENT_PATH, CURRENT_TIME=self.CURRENT_TIME, params=self.params)
+        self.tuner = Tunning(
+            self.data,
+            self._DOMAINS,
+            Results,
+            Trainer,
+            Tester,
+            sample_size=5_000,
+            CURRENT_PATH=self.CURRENT_PATH,
+            CURRENT_TIME=self.CURRENT_TIME,
+            params=self.params,
+        )
 
     def load_params(self):
-
-        f = open(os.path.join(self.CURRENT_PATH, "in", "params.json"),
-                 "r", encoding="utf-8")
+        f = open(os.path.join(self.CURRENT_PATH, "in", "params.json"), "r", encoding="utf-8")
 
         # Fail if params.json does not exist
         if f == None:
@@ -39,10 +46,10 @@ class Run:
 
         dict_obj = json.load(f)
 
-        if 'tfidf__ngram_range' in dict_obj:
+        if "tfidf__ngram_range" in dict_obj:
             # Cast tfidf__ngram_range to tuple
-            for idx, elem in enumerate(dict_obj['tfidf__ngram_range']):
-                dict_obj['tfidf__ngram_range'][idx] = tuple(elem)
+            for idx, elem in enumerate(dict_obj["tfidf__ngram_range"]):
+                dict_obj["tfidf__ngram_range"][idx] = tuple(elem)
 
         return dict_obj
 
@@ -51,7 +58,6 @@ class Run:
 
 
 if __name__ == "__main__":
-    runner = Run(
-        dataset_name="arubenruben/portuguese-language-identification-splitted")
+    runner = Run(dataset_name="arubenruben/portuguese-language-identification-splitted")
 
     runner.tune()
