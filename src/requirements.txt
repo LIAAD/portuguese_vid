@@ -1,0 +1,18 @@
+datasets
+pandas
+transformers
+sklearn
+python-dotenv
+fasttext-langdetect
+huggingface_hub
+numpy
+evaluate
+nltk
+--index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+torchaudio
+transformers
+plotly==5.16.0
+kaleido
+torchsampler

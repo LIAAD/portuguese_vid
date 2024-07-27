@@ -1,0 +1,7 @@
+beautifulsoup4
+lxml
+html5lib
+requests
+demoji
+pymongo
+clean-text[gpl,sklearn]
