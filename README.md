@@ -17,12 +17,16 @@ conda activate .conda
 pip install -e .
 ```
 
+3. Download raw data:
+
+```sh
+sh scripts/download_data.sh
+```
 
 ### Execution
 
 #### Training
 
 #### Evaluation
-
 
 

@@ -199,4 +199,5 @@ data/others.py
 
 *.csv
 *.dtd
-pt_variety_identifier/thrash/ensemble.py
+
+data/
