@@ -2,13 +2,14 @@ import json
 import os
 from time import time
 
+from tqdm import tqdm
+
 from ptvid.src.data import Data
 from ptvid.src.n_grams.results import Results
 from ptvid.src.n_grams.tester import Tester
 from ptvid.src.n_grams.trainer import Trainer
 from ptvid.src.tunning import Tunning
 from ptvid.src.utils import create_output_dir, setup_logger
-from tqdm import tqdm
 
 
 class Run:
@@ -59,5 +60,5 @@ class Run:
 
 
 if __name__ == "__main__":
-    runner = Run(dataset_name="arubenruben/portuguese-language-identification-splitted")
+    runner = Run(dataset_name="liaad/PtBrVId")
     runner.tune()

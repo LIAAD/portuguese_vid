@@ -3,13 +3,14 @@ from multiprocessing import Process
 from time import time
 
 import torch
+from tqdm import tqdm
+
 from ptvid.src.bert.data import Data
 from ptvid.src.bert.results import Results
 from ptvid.src.bert.tester import Tester
 from ptvid.src.bert.trainer import Trainer
 from ptvid.src.tunning import Tunning
 from ptvid.src.utils import create_output_dir, setup_logger
-from tqdm import tqdm
 
 
 class Run:

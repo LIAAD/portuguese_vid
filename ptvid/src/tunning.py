@@ -6,7 +6,16 @@ import numpy as np
 
 class Tunning:
     def __init__(
-        self, data, domains, Results, Trainer, Tester, sample_size, CURRENT_PATH, CURRENT_TIME, params=None
+        self, 
+        data, 
+        domains, 
+        Results, 
+        Trainer, 
+        Tester, 
+        sample_size, 
+        CURRENT_PATH, 
+        CURRENT_TIME, 
+        params=None,
     ) -> None:
         self.data = data
         self.Trainer = Trainer
