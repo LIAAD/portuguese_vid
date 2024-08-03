@@ -1,5 +1,6 @@
 import logging
 
+import datasets
 import nltk
 import numpy as np
 from nltk.tokenize import word_tokenize
@@ -10,10 +11,7 @@ from sklearn.pipeline import Pipeline
 
 
 class Trainer:
-    def __init__(self, train_dataset, params, n_iter=500) -> None:
-        nltk.download("stopwords")
-        nltk.download("punkt")
-
+    def __init__(self, train_dataset: datasets.Dataset, params: dict, n_iter: int = 500):
         self.pipeline = Pipeline(
             [
                 (
@@ -21,6 +19,7 @@ class Trainer:
                     TfidfVectorizer(
                         tokenizer=lambda text: word_tokenize(text, language="portuguese"),
                         stop_words=nltk.corpus.stopwords.words("portuguese"),
+                        token_pattern=None,
                     ),
                 ),
                 ("clf", BernoulliNB()),
@@ -46,9 +45,6 @@ class Trainer:
 
     def train(self):
         logging.info("Training model...")
-
         results = self.search.fit(np.array(self.train_dataset["text"]), np.array(self.train_dataset["label"]))
-
         logging.info("Training finished!")
-
         return results, results.best_estimator_

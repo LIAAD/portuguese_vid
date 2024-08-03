@@ -2,29 +2,29 @@ import logging
 import os
 
 import numpy as np
+from ptvid.constants import DOMAINS
 
 
 class Tunning:
     def __init__(
-        self, 
-        data, 
-        domains, 
-        Results, 
-        Trainer, 
-        Tester, 
-        sample_size, 
-        CURRENT_PATH, 
-        CURRENT_TIME, 
+        self,
+        data,
+        domains,
+        Results,
+        Trainer,
+        Tester,
+        CURRENT_PATH,
+        CURRENT_TIME,
         params=None,
+        sample_size: int = None,
     ) -> None:
         self.data = data
         self.Trainer = Trainer
         self.Tester = Tester
-        self._DOMAINS = domains
         self.sample_size = sample_size
         self.CURRENT_PATH = CURRENT_PATH
         self.CURRENT_TIME = CURRENT_TIME
-        self.results = Results(os.path.join(self.CURRENT_PATH, "out", str(CURRENT_TIME)), self._DOMAINS)
+        self.results = Results(os.path.join(self.CURRENT_PATH, "out", str(CURRENT_TIME)), DOMAINS)
         self.params = params
 
     def run(self, start_pos_prob=0.0, stop_pos_prob=1.0):
@@ -32,7 +32,7 @@ class Tunning:
 
         for pos_prob in np.arange(start_pos_prob, stop_pos_prob + 0.1, 0.1):
             for ner_prob in np.arange(0.0, 1.0 + 0.1, 0.1):
-                for domain in self._DOMAINS:
+                for domain in DOMAINS:
                     logging.info(f"Running {domain} pos_prob={pos_prob}, ner_prob={ner_prob}")
 
                     dataset = self.data.load_domain(

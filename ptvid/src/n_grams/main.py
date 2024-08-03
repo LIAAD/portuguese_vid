@@ -10,37 +10,34 @@ from ptvid.src.n_grams.tester import Tester
 from ptvid.src.n_grams.trainer import Trainer
 from ptvid.src.tunning import Tunning
 from ptvid.src.utils import create_output_dir, setup_logger
+from ptvid.constants import DOMAINS
 
 
 class Run:
-    def __init__(self, dataset_name) -> None:
-        self.CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-        self.CURRENT_TIME = int(time())
-        self.params = self.load_params()
+    def __init__(self, dataset_name: str, sample_size: int):
+        self.current_path = os.path.dirname(os.path.abspath(__file__))
+        self.current_time = int(time())
+        self.params = self._load_params()
 
-        create_output_dir(self.CURRENT_PATH, self.CURRENT_TIME)
-        setup_logger(self.CURRENT_PATH, self.CURRENT_TIME)
+        create_output_dir(self.current_path, self.current_time)
+        setup_logger(self.current_path, self.current_time)
 
         self.data = Data(dataset_name)
-        self._DOMAINS = ["literature", "journalistic", "legal", "politics", "web", "social_media"]
-
-        # Enable progress bar for pandas
-        tqdm.pandas()
 
         self.tuner = Tunning(
             self.data,
-            self._DOMAINS,
+            DOMAINS,
             Results,
             Trainer,
             Tester,
-            sample_size=5_000,
-            CURRENT_PATH=self.CURRENT_PATH,
-            CURRENT_TIME=self.CURRENT_TIME,
+            CURRENT_PATH=self.current_path,
+            CURRENT_TIME=self.current_time,
             params=self.params,
+            sample_size=sample_size
         )
 
-    def load_params(self):
-        f = open(os.path.join(self.CURRENT_PATH, "in", "params.json"), "r", encoding="utf-8")
+    def _load_params(self):
+        f = open(os.path.join(self.current_path, "in", "params.json"), "r", encoding="utf-8")
 
         # Fail if params.json does not exist
         if f is None:
@@ -60,5 +57,5 @@ class Run:
 
 
 if __name__ == "__main__":
-    runner = Run(dataset_name="liaad/PtBrVId")
+    runner = Run(dataset_name="liaad/PtBrVId", sample_size=3_000)
     runner.tune()

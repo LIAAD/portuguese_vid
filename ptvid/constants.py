@@ -1,3 +1,5 @@
+import multiprocessing as mp
+
 from pathlib import Path
 
 ROOT = Path().parent
@@ -5,7 +7,16 @@ ROOT = Path().parent
 RAW_DATA_DIR = ROOT / "data" / "raw" / "data"
 HF_DATA_DIR = ROOT / "data" / "hf"
 
-DOMAINS = ["journalistic", "literature", "legal", "politics", "web", "social_media"]
+N_PROC = mp.cpu_count()
+
+DOMAINS = [
+    "journalistic", 
+    "literature", 
+    "legal", 
+    #"politics", 
+    "web", 
+    "social_media"
+]
 
 LABEL2ID = {
     "PT-PT": 0,

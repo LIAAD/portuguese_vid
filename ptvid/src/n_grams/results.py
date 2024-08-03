@@ -21,7 +21,7 @@ class Results(BaseResults):
             self.best_f1_scores[train_domain]["pos_prob"] = pos_prob
             self.best_f1_scores[train_domain]["ner_prob"] = ner_prob
 
-            logging.info(f"Saving best cross_domain_f1 scores to file")
+            logging.info("Saving best cross_domain_f1 scores to file")
 
             self.best_final_results()
 

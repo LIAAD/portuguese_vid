@@ -1,1 +1,1 @@
-python ptvid/src/ngram/main.py 
+python ptvid/src/n_grams/main.py 

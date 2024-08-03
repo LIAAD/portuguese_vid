@@ -19,14 +19,12 @@ class Data(BaseData):
 
         # Set the tensor type and the columns which the dataset should return
         dataset.set_format(type="torch", columns=["input_ids", "attention_mask", "label"])
-
         return DataLoader(dataset, batch_size=self.batch_size)
 
     def load_domain(self, domain, balance, pos_prob, ner_prob, sample_size=None):
         dataset = super().load_domain(
             domain=domain, balance=balance, pos_prob=pos_prob, ner_prob=ner_prob, sample_size=sample_size
         )
-
         return self._adapt_dataset(dataset)
 
     def load_test_set(self):

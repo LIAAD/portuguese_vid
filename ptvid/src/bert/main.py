@@ -11,6 +11,7 @@ from ptvid.src.bert.tester import Tester
 from ptvid.src.bert.trainer import Trainer
 from ptvid.src.tunning import Tunning
 from ptvid.src.utils import create_output_dir, setup_logger
+from ptvid.constants import DOMAINS
 
 
 class Run:
@@ -23,8 +24,6 @@ class Run:
         setup_logger(self.CURRENT_PATH, self.CURRENT_TIME)
 
         self.data = Data(dataset_name, tokenizer_name=tokenizer_name, batch_size=batch_size)
-
-        self._DOMAINS = ["literature", "journalistic", "legal", "politics", "web", "social_media"]
 
         self.model_name = model_name
 
@@ -41,7 +40,7 @@ class Run:
 
             tuner = Tunning(
                 self.data,
-                self._DOMAINS,
+                DOMAINS,
                 Results,
                 Trainer,
                 Tester,
@@ -68,7 +67,7 @@ class Run:
     def tune_with_cpu(self):
         tuner = Tunning(
             self.data,
-            self._DOMAINS,
+            DOMAINS,
             Results,
             Trainer,
             Tester,

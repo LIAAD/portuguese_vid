@@ -15,23 +15,16 @@ class Tester:
         predictions = self.pipeline.predict(self.test_dataset["text"])
 
         accuracy = self.accuracy.compute(references=self.test_dataset["label"], predictions=predictions)["accuracy"]
-
         f1 = self.f1.compute(references=self.test_dataset["label"], predictions=predictions)["f1"]
-
         precision = self.precision.compute(references=self.test_dataset["label"], predictions=predictions)["precision"]
-
         recall = self.recall.compute(references=self.test_dataset["label"], predictions=predictions)["recall"]
-
         return accuracy, f1, precision, recall
 
     def test(self):
         results = {}
-
         for domain in self.test_dataset_dict.keys():
             self.test_dataset = self.test_dataset_dict[domain]
-
             accuracy, f1, precision, recall = self._test()
-
             results[domain] = {"accuracy": accuracy, "f1": f1, "precision": precision, "recall": recall}
 
         # Calculate the average of all domains except the train domain
