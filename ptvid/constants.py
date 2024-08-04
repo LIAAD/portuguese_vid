@@ -13,7 +13,7 @@ DOMAINS = [
     "journalistic", 
     "literature", 
     "legal", 
-    #"politics", 
+    "politics", 
     "web", 
     "social_media"
 ]
