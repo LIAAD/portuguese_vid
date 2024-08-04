@@ -2,19 +2,20 @@
 Script used to merge the different sources of the PtBRVId corpus.
 """
 
-import json
+import logging
 import multiprocessing as mp
 import re
 from typing import List
 
-import numpy as np
-from nltk.tokenize import word_tokenize
 import datasets
 import justext
+import numpy as np
 from cleantext import clean
-from tqdm import tqdm
+from nltk.tokenize import word_tokenize
 
-from ptvid.constants import DOMAINS, ROOT
+from ptvid.constants import DOMAINS
+
+logging.basicConfig(level=logging.INFO)
 
 N = 500
 
@@ -88,156 +89,50 @@ class PortugueseDetokenizer:
         return text.strip()
 
 
-def kind_jaccard_sim(str1, str2):
-    dif = 0
-    unique = set(str1) | set(str2)
-    for char in unique:
-        c1 = max(str1.count(char), 0)
-        c2 = max(str2.count(char), 0)
-        dif += abs(c1 - c2)
-    return dif
-
-
-def build_test():
-    detokenizer = PortugueseDetokenizer()
-    for domain in DOMAINS:
-        print(domain)
-        trainset = datasets.load_dataset("liaad/PtBrVId", domain)
-        testset = datasets.load_dataset("LCA-PORVID/gold_labelled", domain)
-
-        def process(example):
-            text = example["text"]
-            text = text.replace("<<NUMBER>>", "")
-            text = text.replace("<<DIGIT>>", "")
-            text = text.replace("<<CUR>>", "")
-            text = text.replace("<<PHONE>>", "")
-            text = text.replace("<<URL>>", "")
-            text = text.replace("<<EMAIL>>", "")
-            text = detokenizer.detokenize(text.split(" "))
-            example["ptext"] = text
-            return example
-
-        testset = testset.map(process, num_proc=mp.cpu_count())
-
-        scores, train_idxs, train_texts = [], [], []
-        for sentence, label in tqdm(
-            zip(testset["test"]["ptext"], testset["test"]["label"]), total=len(testset["test"])
-        ):
-            ref_text = sentence.replace(" ", "")
-
-            def compute_distance(example):
-                text = example["text"].replace(" ", "")
-                example["score"] = kind_jaccard_sim(text, ref_text)
-                return example
-
-            trainset = trainset.map(compute_distance, num_proc=mp.cpu_count())
-            min_score = min(trainset["train"]["score"])
-            scores.append(min_score)
-            min_idx = trainset["train"]["score"].index(min_score)
-            train_idxs.append(min_idx)
-            train_texts.append(trainset["train"]["text"][min_idx])
-
-        testset["test"] = testset["test"].add_column("scores", scores)
-        testset["test"] = testset["test"].add_column("train_idx", train_idxs)
-        testset["test"] = testset["test"].add_column("train_text", train_texts)
-        testset.push_to_hub("hugosousa/testset", domain)
-
-
-def push_clean_test():
-    detokenizer = PortugueseDetokenizer()
-    for domain in DOMAINS:
-        inpath = ROOT / "tmp" / f"{domain}.json"
-        content = json.load(inpath.open())
-        testset = datasets.Dataset.from_list(content)
-
-        def process(example):
-            if example["train_idx"] == -1:
-                text = detokenizer.detokenize(example["text"].split(" "))
-            else:
-                text = example["train_text"]
-            example["text"] = text
-            return example
-
-        testset = testset.map(process, num_proc=1)
-        testset = testset.remove_columns("train_text")
-        testset.push_to_hub("hugosousa/testset2", domain)
-
-
-def manual_fix_testset():
-    for domain in DOMAINS:
-        dataset = datasets.load_dataset("hugosousa/testset", domain)
-        df = dataset["test"].to_pandas()
-        outfile = ROOT / "tmp" / f"{domain}.json"
-        outfile.parent.mkdir(exist_ok=True)
-        content = json.loads(df.to_json(orient="records"))
-        json.dump(content, outfile.open("w"), indent=4, ensure_ascii=False)
-
-
-def build_final():
-    for domain in DOMAINS:
-        dataset = datasets.load_dataset("liaad/PtBrVId", domain, split="train")
-        testset = datasets.load_dataset("hugosousa/testset2", domain, split="train")
-
-        idxs2drop = [idx for idx in testset["train_idx"] if idx != -1]
-        idxs2keep = [i for i in range(len(dataset)) if i not in idxs2drop]
-        dataset = dataset.select(
-            idxs2keep,
-        )
-
-        testset = testset.remove_columns("train_idx")
-
-        label0 = dataset.filter(lambda x: x["label"] == 0, num_proc=mp.cpu_count())
-        valid_label0 = label0.select(range(N))
-        train_label0 = label0.select(range(N, len(label0)))
-        label1 = dataset.filter(lambda x: x["label"] == 1, num_proc=mp.cpu_count())
-        valid_label1 = label1.select(range(N))
-        train_label1 = label1.select(range(N, len(label1)))
-
-        trainset = datasets.concatenate_datasets([train_label0, train_label1])
-        validset = datasets.concatenate_datasets([valid_label0, valid_label1])
-        new_dataset = datasets.DatasetDict(
-            {
-                "train": trainset,
-                "valid": validset,
-                "test": testset,
-            }
-        )
-        new_dataset.push_to_hub("liaad/PtBrVId", domain)
-
-
-def resize_valid():
-    for domain in DOMAINS:
-        trainset = datasets.load_dataset("liaad/PtBrVId", domain, split="train")
-        validset = datasets.load_dataset("liaad/PtBrVId", domain, split="valid")
-
-        label0 = validset.filter(lambda x: x["label"] == 0)  # , num_proc=mp.cpu_count())
-        valid_label0 = label0.select(range(N))
-        train_label0 = label0.select(range(N, len(label0)))
-        label1 = validset.filter(lambda x: x["label"] == 1)  # , num_proc=mp.cpu_count())
-        valid_label1 = label1.select(range(N))
-        train_label1 = label1.select(range(N, len(label1)))
-
-        trainset = datasets.concatenate_datasets([trainset, train_label0, train_label1])
-        validset = datasets.concatenate_datasets([valid_label0, valid_label1])
-
-        trainset.push_to_hub("liaad/PtBrVId", domain, split="train")
-        validset.push_to_hub("liaad/PtBrVId", domain, split="valid")
-
-
-def clean_web():
-    trainset = datasets.load_dataset("liaad/PtBrVId", "web", split="train")
-    validset = datasets.load_dataset("liaad/PtBrVId", "web", split="valid")
-    dataset = datasets.concatenate_datasets([trainset, validset])
-
-    def clean_text(example):
+def clean_web(dataset):
+    def _clean_text(example):
         paragraphs = justext.justext(example["text"], justext.get_stoplist("Portuguese"))
         text = " ".join(paragraph.text for paragraph in paragraphs if paragraph.class_type == "good")
         return {"text": text}
 
-    dataset = dataset.map(clean_text, num_proc=mp.cpu_count())
+    dataset = dataset.map(_clean_text, num_proc=mp.cpu_count())
     dataset = dataset.filter(lambda x: x["text"] != "", num_proc=mp.cpu_count())
+    return dataset
 
-    # add new valid examples
+
+def clean_text(dataset):
+    def _clean_text(example):
+        text = clean(
+            example["text"],
+            fix_unicode=True,
+            to_ascii=True,
+            lower=False,
+            normalize_whitespace=True,
+        )
+        return {"text": text}
+
+    dataset = dataset.map(_clean_text, num_proc=mp.cpu_count())
+    dataset = dataset.filter(lambda x: x["text"] != "", num_proc=mp.cpu_count())
+    return dataset
+
+
+def drop_outliers(dataset):
+    def count_tokens(example):
+        tokens = word_tokenize(example["text"], "portuguese")
+        return {"n_tokens": len(tokens)}
+
+    dataset = dataset.map(count_tokens, num_proc=mp.cpu_count())
+    q1 = np.percentile(dataset["n_tokens"], 25)
+    q3 = np.percentile(dataset["n_tokens"], 75)
+    iqr = q3 - q1
+    min_tokens = q1 - 1.5 * iqr
+    max_tokens = q3 + 1.5 * iqr
+    dataset = dataset.filter(lambda x: min_tokens < x["n_tokens"] < max_tokens, num_proc=mp.cpu_count())
+    dataset = dataset.remove_columns("n_tokens")
+    return dataset
+
+
+def train_valid_split(dataset):
     label0 = dataset.filter(lambda x: x["label"] == 0, num_proc=mp.cpu_count())
     valid_label0 = label0.select(range(N))
     train_label0 = label0.select(range(N, len(label0)))
@@ -248,79 +143,61 @@ def clean_web():
     trainset = datasets.concatenate_datasets([train_label0, train_label1])
     validset = datasets.concatenate_datasets([valid_label0, valid_label1])
 
-    trainset.push_to_hub("liaad/PtBrVId", "web", split="train")
-    validset.push_to_hub("liaad/PtBrVId", "web", split="valid")
+    return trainset, validset
 
 
-def clean_text():
-    def clean_text(example):
-        text = clean(
-            example["text"],
-            fix_unicode=True,
-            to_ascii=True,
-        )
+def fix_tokens(dataset):
+    detokenizer = PortugueseDetokenizer()
+
+    def _fix_tokens(example):
+        tokens = example["text"].split(" ")
+        text = detokenizer.detokenize(tokens)
         return {"text": text}
 
-    for domain in DOMAINS:
-        for split in ["train", "valid"]:
-            dataset = datasets.load_dataset("liaad/PtBrVId", domain, split=split)
-            dataset = dataset.map(clean_text, num_proc=mp.cpu_count())
-            dataset = dataset.filter(lambda x: x["text"] != "", num_proc=mp.cpu_count())
-            dataset.push_to_hub("liaad/PtBrVId", domain, split=split)
+    dataset = dataset.map(_fix_tokens, num_proc=mp.cpu_count())
+    return dataset
 
 
-def drop_outliers():
-    def count_tokens(example):
-        tokens = word_tokenize(example["text"], "portuguese")
-        return {"n_tokens": len(tokens)}
-
-    for domain in DOMAINS:
-        trainset = datasets.load_dataset("liaad/PtBrVId", domain, split="train")
-        validset = datasets.load_dataset("liaad/PtBrVId", domain, split="valid")
-        dataset = datasets.concatenate_datasets([trainset, validset])
-        dataset = dataset.map(count_tokens, num_proc=mp.cpu_count())
-        q1 = np.percentile(dataset["n_tokens"], 25) 
-        q3 = np.percentile(dataset["n_tokens"], 75) 
-        iqr = q3 - q1
-        min_tokens = q1 - 1.5 * iqr
-        max_tokens = q3 + 1.5 * iqr
-        dataset = dataset.filter(lambda x: min_tokens < x["n_tokens"] < max_tokens, num_proc=mp.cpu_count())
-        dataset = dataset.remove_columns("n_tokens")
-
-        label0 = dataset.filter(lambda x: x["label"] == 0, num_proc=mp.cpu_count())
-        valid_label0 = label0.select(range(N))
-        train_label0 = label0.select(range(N, len(label0)))
-        label1 = dataset.filter(lambda x: x["label"] == 1, num_proc=mp.cpu_count())
-        valid_label1 = label1.select(range(N))
-        train_label1 = label1.select(range(N, len(label1)))
-
-        trainset = datasets.concatenate_datasets([train_label0, train_label1])
-        validset = datasets.concatenate_datasets([valid_label0, valid_label1])
-
-        trainset.push_to_hub("liaad/PtBrVId", domain, split="train")
-        validset.push_to_hub("liaad/PtBrVId", domain, split="valid")
-
-
-def train_valid_split():
-    for domain in DOMAINS:
-        trainset = datasets.load_dataset("liaad/PtBrVId", domain, split="train")
-        validset = datasets.load_dataset("liaad/PtBrVId", domain, split="valid")
-        dataset = datasets.concatenate_datasets([trainset, validset])
-
-        # add new valid examples
-        label0 = dataset.filter(lambda x: x["label"] == 0, num_proc=mp.cpu_count())
-        valid_label0 = label0.select(range(N))
-        train_label0 = label0.select(range(N, len(label0)))
-        label1 = dataset.filter(lambda x: x["label"] == 1, num_proc=mp.cpu_count())
-        valid_label1 = label1.select(range(N))
-        train_label1 = label1.select(range(N, len(label1)))
-
-        trainset = datasets.concatenate_datasets([train_label0, train_label1])
-        validset = datasets.concatenate_datasets([valid_label0, valid_label1])
-
-        trainset.push_to_hub("liaad/PtBrVId", domain, split="train")
-        validset.push_to_hub("liaad/PtBrVId", domain, split="valid")
+def drop_duplicates(dataset):
+    df = dataset.to_pandas()
+    df = df.drop_duplicates(ignore_index=True)
+    dataset = datasets.Dataset.from_pandas(df)
+    return dataset
 
 
 if __name__ == "__main__":
-    drop_outliers()
+    raw_dataset_name = "arubenruben/portuguese-language-identification-raw"
+    clean_dataset_name = "liaad/PtBrVId"
+
+    for domain in DOMAINS:
+        logging.info("loading dataset")
+        dataset = datasets.load_dataset(raw_dataset_name, domain, split="train")
+
+        if domain == "web":
+            dataset = dataset.remove_columns("domain")
+
+        logging.info("drop empty")
+        dataset = dataset.filter(lambda x: x["text"] != "", num_proc=mp.cpu_count())
+
+        logging.info("drop duplicates")
+        dataset = drop_duplicates(dataset)
+
+        logging.info("clean text")
+        dataset = clean_text(dataset)
+
+        logging.info("fix tokens")
+        dataset = fix_tokens(dataset)
+
+        logging.info("clean web")
+        if domain == "web":
+            dataset = clean_web(dataset)
+
+        logging.info("drop outliers")
+        dataset = drop_outliers(dataset)
+
+        logging.info("split into train and valid")
+        trainset, validset = train_valid_split(dataset)
+
+        logging.info("push to hub")
+        trainset.push_to_hub(clean_dataset_name, domain, split="train")
+        validset.push_to_hub(clean_dataset_name, domain, split="valid")
