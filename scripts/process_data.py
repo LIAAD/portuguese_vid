@@ -206,6 +206,9 @@ def main(
         logging.info("drop duplicates")
         dataset = drop_duplicates(dataset)
 
+        logging.info("drop outliers")
+        dataset = drop_outliers(dataset)
+
         logging.info("clean text")
         dataset = clean_text(dataset)
 
@@ -216,9 +219,6 @@ def main(
         logging.info("clean web")
         if domain == "web":
             dataset = clean_web(dataset)
-
-        logging.info("drop outliers")
-        dataset = drop_outliers(dataset)
 
         logging.info("split into train and valid")
         trainset, validset = train_valid_split(dataset)
