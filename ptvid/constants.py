@@ -27,3 +27,6 @@ ID2LABEL = {
     0: "PT-PT",
     1: "PT-BR",
 }
+
+
+SAMPLE_SIZE = 1_000
