@@ -25,6 +25,7 @@ dependencies = [
     "lxml>=5.2.1",
     "cleantext>=1.1.4",
     "fasttext-langdetect>=1.0.5",
+    "justext==3.0.1",
 ]
 
 requires-python = "~=3.11"
