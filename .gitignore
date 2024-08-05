@@ -201,3 +201,5 @@ data/others.py
 *.dtd
 
 data/
+
+.vscode

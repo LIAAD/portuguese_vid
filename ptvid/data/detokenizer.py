@@ -9,7 +9,6 @@ class PortugueseDetokenizer:
     ENDING_QUOTES = [
         (re.compile(r"(\S)\s(\'\')"), r"\1\2"),
         (re.compile(r"(\S)\s(»)"), r"\1\2"),
-        (re.compile(r"(\S)\s(\")"), r"\1\2"),
         (re.compile(r"(\'\')\s([.,:)\]>};%])"), r"\1\2"),
         (re.compile(r"''"), '"'),
     ]
@@ -64,7 +63,19 @@ class PortugueseDetokenizer:
 
     def detokenize(self, tokens: List[str]) -> str:
         """Duck-typing the abstract *tokenize()*."""
-        text = " ".join(tokens)
+        
+        quote_count = 0
+        text = ""
+        for token in tokens:
+            if token == '"':
+                if quote_count % 2 == 0:
+                    text += '"'
+                else:
+                    text = text[:-1]
+                    text += '" '
+                quote_count += 1
+            else:
+                text += f'{token} '
 
         # Add extra space to make things easier
         text = " " + text + " "
@@ -92,6 +103,9 @@ class PortugueseDetokenizer:
 
         for pronoun in self.PRONOUNS:
             text = text.replace(pronoun, pronoun.strip())
+
+        quote_count = 0
+
 
         return text.strip()
 
