@@ -4,12 +4,7 @@ import spacy
 
 
 class Delexicalizer:
-    def __init__(
-        self, 
-        prob_pos_tag: float, 
-        prob_ner_tag: float, 
-        spacy_model: str = "pt_core_news_sm"
-    ) -> None:
+    def __init__(self, prob_pos_tag: float, prob_ner_tag: float, spacy_model: str = "pt_core_news_sm") -> None:
         if spacy_model not in spacy.util.get_installed_models():
             spacy.cli.download(spacy_model)
 
@@ -25,7 +20,7 @@ class Delexicalizer:
         self.prob_ner_tag = prob_ner_tag
 
     def delexicalize(self, text: str):
-        if self.prob_ner_tag == 0 and self.prob_pos_tag == 0 :
+        if self.prob_ner_tag == 0 and self.prob_pos_tag == 0:
             return text
 
         doc = self.nlp(text)

@@ -9,14 +9,7 @@ HF_DATA_DIR = ROOT / "data" / "hf"
 
 N_PROC = mp.cpu_count()
 
-DOMAINS = [
-    "journalistic", 
-    "literature", 
-    "legal", 
-    "politics", 
-    "web", 
-    "social_media"
-]
+DOMAINS = ["journalistic", "literature", "legal", "politics", "web", "social_media"]
 
 LABEL2ID = {
     "PT-PT": 0,

@@ -35,23 +35,33 @@ def test_detokenize():
     assert detokenizer.detokenize(tokens) == "Hello: world;"
 
     tokens = "Tanto é assim , que os próprios créditos trabalhistas que dão origem às contribuições previdenciárias sobre eles incidentes estão sujeitos a atualização monetária e juros da mora , apesar da eventual existência de controvérsia .".split()
-    assert detokenizer.detokenize(tokens) == "Tanto é assim, que os próprios créditos trabalhistas que dão origem às contribuições previdenciárias sobre eles incidentes estão sujeitos a atualização monetária e juros da mora, apesar da eventual existência de controvérsia."
+    assert (
+        detokenizer.detokenize(tokens)
+        == "Tanto é assim, que os próprios créditos trabalhistas que dão origem às contribuições previdenciárias sobre eles incidentes estão sujeitos a atualização monetária e juros da mora, apesar da eventual existência de controvérsia."
+    )
 
 
 def test_detokenize_quotes():
     detokenizer = PortugueseDetokenizer()
-    tokens = """Coloquio " O seculo XX portugues: imagens , discursos e personalidades " , na Casa de Serralves""".split()
-    assert detokenizer.detokenize(tokens) == """Coloquio "O seculo XX portugues: imagens, discursos e personalidades", na Casa de Serralves"""
+    tokens = (
+        """Coloquio " O seculo XX portugues: imagens , discursos e personalidades " , na Casa de Serralves""".split()
+    )
+    assert (
+        detokenizer.detokenize(tokens)
+        == """Coloquio "O seculo XX portugues: imagens, discursos e personalidades", na Casa de Serralves"""
+    )
 
     tokens = """ " O seculo XX portugues: imagens , discursos e personalidades " , na Casa de Serralves""".split()
-    assert detokenizer.detokenize(tokens) == """"O seculo XX portugues: imagens, discursos e personalidades", na Casa de Serralves"""
-    
+    assert (
+        detokenizer.detokenize(tokens)
+        == """"O seculo XX portugues: imagens, discursos e personalidades", na Casa de Serralves"""
+    )
+
     tokens = ' " O seculo XX portugues: imagens , discursos e personalidades " '.split()
     assert detokenizer.detokenize(tokens) == '"O seculo XX portugues: imagens, discursos e personalidades"'
-    
+
     tokens = '" O seculo XX portugues: imagens , discursos e personalidades " '.split()
     assert detokenizer.detokenize(tokens) == '"O seculo XX portugues: imagens, discursos e personalidades"'
-    
+
     tokens = '" O seculo XX portugues: imagens , discursos e personalidades "'.split()
     assert detokenizer.detokenize(tokens) == '"O seculo XX portugues: imagens, discursos e personalidades"'
-    

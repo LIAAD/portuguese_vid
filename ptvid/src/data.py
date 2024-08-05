@@ -1,7 +1,7 @@
 import logging
 
 import pandas as pd
-import datasets 
+import datasets
 from imblearn.under_sampling import RandomUnderSampler
 
 from ptvid.constants import DOMAINS, N_PROC
@@ -22,18 +22,12 @@ class Data:
         return datasets.Dataset.from_pandas(df_dataset)
 
     def _load_domain_all(self):
-        return datasets.concatenate_datasets([
-            datasets.load_dataset(self.dataset_name, domain, split="train")
-            for domain in DOMAINS
-        ])
+        return datasets.concatenate_datasets(
+            [datasets.load_dataset(self.dataset_name, domain, split="train") for domain in DOMAINS]
+        )
 
     def load_domain(
-        self, 
-        domain: str, 
-        balance: bool, 
-        pos_prob: float, 
-        ner_prob: float, 
-        sample_size: int = None
+        self, domain: str, balance: bool, pos_prob: float, ner_prob: float, sample_size: int = None
     ) -> datasets.Dataset:
         delexicalizer = Delexicalizer(pos_prob, ner_prob)
 
@@ -52,14 +46,8 @@ class Data:
             dataset = dataset.shuffle(seed=42).select(range(min(sample_size, len(dataset))))
 
         logging.info("Delexicalizing Training Dataset")
-        dataset = dataset.map(
-            lambda x: {"text": delexicalizer.delexicalize(x["text"])}, 
-            num_proc=N_PROC
-        )
+        dataset = dataset.map(lambda x: {"text": delexicalizer.delexicalize(x["text"])}, num_proc=N_PROC)
         return dataset
 
     def load_test_set(self) -> dict:
-        return {
-            domain: datasets.load_dataset(self.dataset_name, domain, split="valid")
-            for domain in DOMAINS
-        }
+        return {domain: datasets.load_dataset(self.dataset_name, domain, split="valid") for domain in DOMAINS}
