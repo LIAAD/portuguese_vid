@@ -8,7 +8,6 @@ from tqdm import tqdm
 class Trainer:
     def __init__(self, train_dataset, params) -> None:
         self.train_dataset = train_dataset
-        print(f"Using {self.device} device")
 
         self.model = LanguageIdentfier(params["model_name"])
 

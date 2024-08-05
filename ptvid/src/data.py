@@ -49,7 +49,7 @@ class Data:
 
         if sample_size is not None:
             logging.info("Sampling Training Dataset")
-            dataset = dataset.shuffle(seed=42).select(range(sample_size))
+            dataset = dataset.shuffle(seed=42).select(range(min(sample_size, len(dataset))))
 
         logging.info("Delexicalizing Training Dataset")
         dataset = dataset.map(

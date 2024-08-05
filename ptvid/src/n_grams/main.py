@@ -51,4 +51,4 @@ def _load_params(current_path: str):
 
 
 if __name__ == "__main__":
-    run(dataset_name="liaad/PtBrVId", sample_size=3_000)
+    run(dataset_name="liaad/PtBrVId", sample_size=5_000)
