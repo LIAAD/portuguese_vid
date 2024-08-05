@@ -58,6 +58,27 @@ class PortugueseDetokenizer:
         (re.compile(r"``"), r'"'),
     ]
 
+    PRONOUNS = [
+        " -me", 
+        " -te", 
+        " -se", 
+        " -nos", 
+        " -vos", 
+        " -o", 
+        " -a", 
+        " -os", 
+        " -as", 
+        " -lhe", 
+        " -lhes", 
+        " -lho", 
+        " -lha", 
+        " -lhos", 
+        " -lhas"
+    ]
+
+    # Regex to remove space before hyphen if it is connected to a pronoun
+    PRONOUNS_REGEX = re.compile(r"(\S)\s(-" + "|".join(PRONOUNS) + r")")
+
     def detokenize(self, tokens: List[str]) -> str:
         """Duck-typing the abstract *tokenize()*."""
         text = " ".join(tokens)
@@ -85,6 +106,9 @@ class PortugueseDetokenizer:
         # Reverse the regexes applied for starting quotes.
         for regexp, substitution in self.STARTING_QUOTES:
             text = regexp.sub(substitution, text)
+
+        for pronoun in self.PRONOUNS:
+            text = text.replace(pronoun, pronoun.strip())
 
         return text.strip()
 
@@ -165,10 +189,10 @@ def drop_duplicates(dataset):
     return dataset
 
 
-if __name__ == "__main__":
-    raw_dataset_name = "arubenruben/portuguese-language-identification-raw"
-    clean_dataset_name = "liaad/PtBrVId"
-
+def main(
+    raw_dataset_name: str = "arubenruben/portuguese-language-identification-raw",
+    clean_dataset_name: str = "liaad/PtBrVId",
+):
     for domain in DOMAINS:
         logging.info("loading dataset")
         dataset = datasets.load_dataset(raw_dataset_name, domain, split="train")
@@ -201,3 +225,8 @@ if __name__ == "__main__":
         logging.info("push to hub")
         trainset.push_to_hub(clean_dataset_name, domain, split="train")
         validset.push_to_hub(clean_dataset_name, domain, split="valid")
+
+
+if __name__ == "__main__":
+    main()
+    
