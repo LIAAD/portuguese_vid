@@ -5,28 +5,23 @@ from time import time
 import torch
 from tqdm import tqdm
 
+from ptvid.constants import DOMAINS
 from ptvid.src.bert.data import Data
 from ptvid.src.bert.results import Results
 from ptvid.src.bert.tester import Tester
 from ptvid.src.bert.trainer import Trainer
 from ptvid.src.tunning import Tunning
 from ptvid.src.utils import create_output_dir, setup_logger
-from ptvid.constants import DOMAINS
 
 
 class Run:
-    def __init__(self, dataset_name, tokenizer_name, model_name, batch_size) -> None:
-        self.CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-        self.CURRENT_TIME = int(time())
-
-        create_output_dir(self.CURRENT_PATH, self.CURRENT_TIME)
-
-        setup_logger(self.CURRENT_PATH, self.CURRENT_TIME)
-
-        self.data = Data(dataset_name, tokenizer_name=tokenizer_name, batch_size=batch_size)
-
+    def __init__(self, dataset_name, model_name, batch_size) -> None:
+        self.current_path = os.path.dirname(os.path.abspath(__file__))
+        self.current_time = int(time())
+        create_output_dir(self.current_path, self.current_time)
+        setup_logger(self.current_path, self.current_time)
+        self.data = Data(dataset_name, tokenizer_name=model_name, batch_size=batch_size)
         self.model_name = model_name
-
         tqdm.pandas()
 
     def tune_with_gpu(self):
@@ -34,19 +29,18 @@ class Run:
 
         share_of_data = 0.9 / num_gpus
         processes = []
-
-        for i in range(num_gpus):
-            device = torch.cuda.get_device_name(i)
+        for gpu_id in range(num_gpus):
+            device = torch.cuda.get_device_name(gpu_id)
 
             tuner = Tunning(
-                self.data,
-                DOMAINS,
-                Results,
-                Trainer,
-                Tester,
-                5_000,
-                self.CURRENT_PATH,
-                self.CURRENT_TIME,
+                data=self.data,
+                domains=DOMAINS,
+                Results=Results,
+                Trainer=Trainer,
+                Tester=Tester,
+                sample_size=5_000,
+                current_path=self.current_path,
+                current_time=self.current_time,
                 params={
                     "epochs": 30,
                     "early_stoping": 5,
@@ -55,10 +49,8 @@ class Run:
                 },
             )
 
-            process = Process(target=tuner.run, args=(i * share_of_data, (i + 1) * share_of_data))
-
+            process = Process(target=tuner.run, args=(gpu_id * share_of_data, (gpu_id + 1) * share_of_data))
             processes.append(process)
-
             process.start()
 
         for p in processes:
@@ -66,14 +58,14 @@ class Run:
 
     def tune_with_cpu(self):
         tuner = Tunning(
-            self.data,
-            DOMAINS,
-            Results,
-            Trainer,
-            Tester,
-            5_000,
-            self.CURRENT_PATH,
-            self.CURRENT_TIME,
+            data=self.data,
+            domains=DOMAINS,
+            Results=Results,
+            Trainer=Trainer,
+            Tester=Tester,
+            sample_size=5_000,
+            current_path=self.current_path,
+            current_time=self.current_time,
             params={
                 "epochs": 30,
                 "early_stoping": 5,
@@ -87,16 +79,14 @@ class Run:
     def tune(self):
         if torch.cuda.is_available():
             return self.tune_with_gpu()
-
         return self.tune_with_cpu()
 
 
 if __name__ == "__main__":
     run = Run(
-        "arubenruben/portuguese-language-identification-splitted",
-        "neuralmind/bert-base-portuguese-cased",
-        "neuralmind/bert-base-portuguese-cased",
-        20,
+        dataset_name="liaad/PtBrVId",
+        model_name="neuralmind/bert-base-portuguese-cased",
+        batch_size=64,
     )
 
     run.tune()

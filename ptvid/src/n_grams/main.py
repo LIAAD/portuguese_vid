@@ -27,8 +27,8 @@ def run(dataset_name: str, sample_size: int):
         Results,
         Trainer,
         Tester,
-        CURRENT_PATH=current_path,
-        CURRENT_TIME=current_time,
+        current_path=current_path,
+        current_time=current_time,
         params=params,
         sample_size=sample_size,
     )

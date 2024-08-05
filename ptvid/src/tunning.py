@@ -13,8 +13,8 @@ class Tunning:
         Results,
         Trainer,
         Tester,
-        CURRENT_PATH,
-        CURRENT_TIME,
+        current_path,
+        current_time,
         params=None,
         sample_size: int = None,
     ) -> None:
@@ -22,9 +22,9 @@ class Tunning:
         self.Trainer = Trainer
         self.Tester = Tester
         self.sample_size = sample_size
-        self.CURRENT_PATH = CURRENT_PATH
-        self.CURRENT_TIME = CURRENT_TIME
-        self.results = Results(os.path.join(self.CURRENT_PATH, "out", str(CURRENT_TIME)), DOMAINS)
+        self.current_path = current_path
+        self.current_time = current_time
+        self.results = Results(os.path.join(self.current_path, "out", str(current_time)), DOMAINS)
         self.params = params
 
     def run(self, start_pos_prob=0.0, stop_pos_prob=1.0):

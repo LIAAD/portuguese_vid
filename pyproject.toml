@@ -26,6 +26,8 @@ dependencies = [
     "cleantext>=1.1.4",
     "fasttext-langdetect>=1.0.5",
     "justext==3.0.1",
+    "imbalanced-learn==0.12.3",
+    "spacy==3.7.5"
 ]
 
 requires-python = "~=3.11"

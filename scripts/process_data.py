@@ -210,7 +210,8 @@ def main(
         dataset = clean_text(dataset)
 
         logging.info("fix tokens")
-        dataset = fix_tokens(dataset)
+        if domain in ["literature", "journalistic"]:
+            dataset = fix_tokens(dataset)
 
         logging.info("clean web")
         if domain == "web":

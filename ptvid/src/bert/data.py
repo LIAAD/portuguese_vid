@@ -1,10 +1,11 @@
-from ptvid.src.data import Data as BaseData
 from torch.utils.data import DataLoader
 from transformers import BertTokenizerFast
 
+from ptvid.src.data import Data as BaseData
+
 
 class Data(BaseData):
-    def __init__(self, dataset_name, tokenizer_name, batch_size):
+    def __init__(self, dataset_name: str, tokenizer_name: str, batch_size: int):
         super().__init__(dataset_name=dataset_name)
 
         self.tokenizer_name = tokenizer_name
@@ -29,8 +30,4 @@ class Data(BaseData):
 
     def load_test_set(self):
         dataset_dict = super().load_test_set()
-
-        for domain in dataset_dict.keys():
-            dataset_dict[domain] = self._adapt_dataset(dataset_dict[domain])
-
-        return dataset_dict
+        return {domain: self._adapt_dataset(dataset_dict[domain]) for domain in dataset_dict}
