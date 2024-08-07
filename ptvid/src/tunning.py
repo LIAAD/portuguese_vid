@@ -36,7 +36,11 @@ class Tunning:
                     logging.info(f"Running {domain} pos_prob={pos_prob}, ner_prob={ner_prob}")
 
                     dataset = self.data.load_domain(
-                        domain, balance=True, pos_prob=pos_prob, ner_prob=ner_prob, sample_size=self.sample_size
+                        domain, 
+                        balance=True, 
+                        pos_prob=pos_prob, 
+                        ner_prob=ner_prob, 
+                        sample_size=self.sample_size
                     )
                     trainer = self.Trainer(dataset, self.params)
                     results, best_model = trainer.train()

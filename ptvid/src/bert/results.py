@@ -7,7 +7,16 @@ class Results(BaseResults):
     def __init__(self, filepath, DOMAINS) -> None:
         super().__init__(filepath, DOMAINS)
 
-    def process(self, cross_domain_f1, train_domain, test_results, train_results, balance, pos_prob, ner_prob):
+    def process(
+        self, 
+        cross_domain_f1, 
+        train_domain, 
+        test_results, 
+        train_results, 
+        balance, 
+        pos_prob, 
+        ner_prob
+    ):
         if cross_domain_f1 > self.best_f1_scores[train_domain]["cross_domain_f1"]:
             logging.info(f"New best f1 score for {train_domain}")
 
