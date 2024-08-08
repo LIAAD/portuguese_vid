@@ -1,9 +1,13 @@
 import multiprocessing as mp
-
+import os
 from pathlib import Path
+
+import torch
+from dotenv import load_dotenv
 
 ROOT = Path().parent
 
+CACHE_DIR = ROOT / "cache"
 RAW_DATA_DIR = ROOT / "data" / "raw" / "data"
 HF_DATA_DIR = ROOT / "data" / "hf"
 
@@ -21,5 +25,12 @@ ID2LABEL = {
     1: "PT-BR",
 }
 
+SAMPLE_SIZE = 3_000
 
-SAMPLE_SIZE = 1_000
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+RAW_DATASET_NAME = "arubenruben/portuguese-language-identification-raw"
+DATASET_NAME = "liaad/PtBrVId"
+
+load_dotenv(ROOT)
+HF_TOKEN = os.getenv("HF_TOKEN")
