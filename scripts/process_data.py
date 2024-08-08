@@ -12,7 +12,7 @@ from cleantext import clean
 from nltk.tokenize import word_tokenize
 
 from ptvid.data.detokenizer import PortugueseDetokenizer
-from ptvid.constants import DOMAINS
+from ptvid.constants import DOMAINS, DATASET_NAME, RAW_DATASET_NAME
 
 logging.basicConfig(level=logging.INFO)
 
@@ -96,8 +96,8 @@ def drop_duplicates(dataset):
 
 
 def main(
-    raw_dataset_name: str = "arubenruben/portuguese-language-identification-raw",
-    clean_dataset_name: str = "liaad/PtBrVId",
+    raw_dataset_name: str = RAW_DATASET_NAME,
+    clean_dataset_name: str = DATASET_NAME,
 ):
     for domain in DOMAINS:
         logging.info("loading dataset")

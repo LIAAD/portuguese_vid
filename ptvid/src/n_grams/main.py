@@ -2,7 +2,7 @@ import json
 import os
 from time import time
 
-from ptvid.constants import DOMAINS, SAMPLE_SIZE
+from ptvid.constants import DOMAINS, SAMPLE_SIZE, DATASET_NAME
 from ptvid.src.data import Data
 from ptvid.src.n_grams.results import Results
 from ptvid.src.n_grams.tester import Tester
@@ -51,4 +51,4 @@ def _load_params(current_path: str):
 
 
 if __name__ == "__main__":
-    run(dataset_name="liaad/PtBrVId", sample_size=SAMPLE_SIZE)
+    run(dataset_name=DATASET_NAME, sample_size=SAMPLE_SIZE)

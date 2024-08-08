@@ -3,19 +3,10 @@ Script used to merge the different sources of the PtBRVId corpus.
 """
 
 import logging
-import multiprocessing as mp
-import re
-from typing import List
 
 import datasets
-import justext
-import numpy as np
-import torch
-from cleantext import clean
-from nltk.tokenize import word_tokenize
-from vllm import LLM, SamplingParams
 
-from ptvid.constants import DOMAINS, N_PROC
+from ptvid.constants import N_PROC
 from ptvid.data.detokenizer import PortugueseDetokenizer
 
 logging.basicConfig(level=logging.INFO)
@@ -53,8 +44,8 @@ def fix_legal(dataset):
 
 
 def main(
-    raw_dataset_name: str = "liaad/PtBrVId",
-    clean_dataset_name: str = "liaad/PtBrVId",
+    raw_dataset_name: str,
+    clean_dataset_name: str,
 ):
     for domain in ["journalistic", "legal"]:
         for split in ["train", "valid"]:
