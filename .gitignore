@@ -203,3 +203,5 @@ data/others.py
 data/
 
 .vscode
+
+cache/
