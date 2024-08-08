@@ -5,18 +5,12 @@ from time import time
 
 import numpy as np
 import torch
-from tqdm import tqdm
 
-from ptvid.constants import DOMAINS, SAMPLE_SIZE, DATASET_NAME, RESULTS_DIR
+from ptvid.constants import DATASET_NAME, DEVICE, DOMAINS, RESULTS_DIR, SAMPLE_SIZE
 from ptvid.src.bert.data import Data
 from ptvid.src.bert.model import LanguageIdentifier
-from ptvid.src.bert.results import Results
-from ptvid.src.bert.tester import Tester
 from ptvid.src.bert.trainer import Trainer
-from ptvid.src.tunning import Tunning
 from ptvid.src.utils import create_output_dir, setup_logger
-
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def main(dataset_name, model_name, batch_size):
@@ -27,15 +21,8 @@ def main(dataset_name, model_name, batch_size):
 
     train_data = Data(dataset_name, split="train", tokenizer_name=model_name, batch_size=batch_size)
     valid_data = Data(dataset_name, split="valid", tokenizer_name=model_name, batch_size=batch_size)
-    tqdm.pandas()
 
-    params = {
-        "epochs": 30,
-        "early_stoping": 5,
-        "model_name": model_name,
-        "device": DEVICE,
-        "lr": 1e-5
-    }
+    params = {"epochs": 30, "early_stoping": 5, "model_name": model_name, "device": DEVICE, "lr": 1e-5}
 
     for pos_prob in np.arange(0.0, 1.1, 0.1):
         for ner_prob in np.arange(0.0, 1.1, 0.1):
@@ -56,24 +43,26 @@ def main(dataset_name, model_name, batch_size):
 
                     criterion = torch.nn.BCELoss()
                     optimizer = torch.optim.AdamW(model.parameters(), lr=params["lr"])
-                    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=params["early_stoping"], verbose=True)
+                    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                        optimizer, patience=params["early_stoping"], verbose=True
+                    )
 
                     trainer = Trainer(
                         train_key=train_key,
-                        model=model, 
-                        train_loader=train_loader, 
-                        valid_loader=valid_loader, 
-                        criterion=criterion, 
-                        optimizer=optimizer, 
-                        scheduler=scheduler
+                        model=model,
+                        train_loader=train_loader,
+                        valid_loader=valid_loader,
+                        criterion=criterion,
+                        optimizer=optimizer,
+                        scheduler=scheduler,
                     )
-                    
+
                     metrics = trainer.fit(epochs=params["epochs"])
                     json.dump(metrics, outpath.open("w"), indent=4)
 
                 else:
                     logging.info(f"This model has already been trained with this configuration. Check {outpath}")
-                    
+
 
 if __name__ == "__main__":
     main(
