@@ -13,7 +13,14 @@ from ptvid.src.bert.trainer import Trainer
 from ptvid.src.utils import create_output_dir, setup_logger
 
 
-def main(dataset_name: str, model_name: str, batch_size: int, epochs: int = 30, patience: int = 3, lr: int = 1e-5):
+def main(
+    dataset_name: str,
+    model_name: str,
+    batch_size: int,
+    epochs: int,
+    patience: int,
+    lr: float,
+):
     current_path = os.path.dirname(os.path.abspath(__file__))
     current_time = int(time())
     create_output_dir(current_path, current_time)
@@ -29,7 +36,7 @@ def main(dataset_name: str, model_name: str, batch_size: int, epochs: int = 30, 
                 outpath = RESULTS_DIR / train_key / "metrics.json"
 
                 if not outpath.exists():
-                    outpath.parent.mkdir(parents=True)
+                    outpath.parent.mkdir(parents=True, exist_ok=True)
 
                     logging.info(f"Running {domain} pos_prob={pos_prob}, ner_prob={ner_prob}")
                     train_loader = train_data.load_domain(
@@ -41,9 +48,7 @@ def main(dataset_name: str, model_name: str, batch_size: int, epochs: int = 30, 
 
                     criterion = torch.nn.BCELoss()
                     optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
-                    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-                        optimizer, patience=patience, verbose=True
-                    )
+                    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=patience, verbose=True)
 
                     trainer = Trainer(
                         train_key=train_key,
@@ -67,4 +72,7 @@ if __name__ == "__main__":
         dataset_name=DATASET_NAME,
         model_name="neuralmind/bert-base-portuguese-cased",
         batch_size=64,
+        epochs=30,
+        patience=3,
+        lr=1e-5,
     )

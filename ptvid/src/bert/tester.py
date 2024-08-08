@@ -28,11 +28,11 @@ class Tester:
                 attention_mask = batch["attention_mask"].to(self.device)
                 labels = batch["label"].to(self.device)
 
-                logits = self.model(input_ids, attention_mask=attention_mask).squeeze(dim=1)
-                loss = self.loss_fn(logits, labels.float())
+                probs = self.model(input_ids, attention_mask=attention_mask).squeeze(dim=1)
+                loss = self.loss_fn(probs, labels.float())
 
-                # If logits is bigger than 0.5, it's 1, otherwise it's 0
-                predictions = (logits > 0.5).long()
+                # If probs is bigger than 0.5, it's 1, otherwise it's 0
+                predictions = (probs > 0.5).long()
 
                 # Detach from GPU
                 predictions = predictions.cpu()

@@ -15,5 +15,5 @@ class LanguageIdentifier(torch.nn.Module):
         pooled_output = outputs[1]
         pooled_output = self.dropout(pooled_output)
         logits = self.linear(pooled_output)
-        logits = self.sigmoid(logits)
-        return logits
+        probs = self.sigmoid(logits)
+        return probs
