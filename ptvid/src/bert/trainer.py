@@ -4,11 +4,12 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from ptvid.constants import DEVICE
+from ptvid.constants import DEVICE, MODEL_DIR
 
 
 class Trainer:
-    def __init__(self, model, train_loader, valid_loader, criterion, optimizer, scheduler=None):
+    def __init__(self, train_key: str, model, train_loader, valid_loader, criterion, optimizer, scheduler=None):
+        self.model_path = MODEL_DIR / self._train_key / "model.pth"
         self.model = model
         self.device = DEVICE
         self.train_loader = train_loader
@@ -46,6 +47,10 @@ class Trainer:
 
         if self.scheduler:
             self.scheduler.step()
+        
+        train_loss = running_loss / (batch_idx + 1)
+        train_acc = 100. * correct / total
+        return train_loss, train_acc 
 
     def validate(self):
         self.model.eval()
@@ -54,7 +59,7 @@ class Trainer:
         total = 0
 
         with torch.no_grad():
-            for batch_idx, (batch) in enumerate(self.train_loader):
+            for batch_idx, (batch) in enumerate(self.valid_loader):
                 input_ids = batch["input_ids"].to(DEVICE)
                 attention_mask = batch["attention_mask"].to(DEVICE)
                 labels = batch["label"].to(DEVICE, dtype=torch.float)
@@ -67,35 +72,37 @@ class Trainer:
                 total += labels.size(0)
                 correct += predicted.eq(labels).sum().item()
 
-        val_loss = running_loss / len(self.valid_loader)
-        val_accuracy = 100.0 * correct / total
-        logging.info(f"Validation loss: {val_loss:.4f}, accuracy: {val_accuracy:.2f}%")
+        valid_loss = running_loss / len(self.valid_loader)
+        valid_acc = 100.0 * correct / total
+        logging.info(f"Validation loss: {valid_loss:.4f}, accuracy: {valid_acc:.2f}%")
 
-        return val_loss, val_accuracy
+        return valid_loss, valid_acc
 
-    def fit(self, epochs):
+    def fit(self, epochs: int) -> dict:
+        best_valid_loss = 10**5
         for epoch in range(epochs):
             logging.info(f"Epoch {epoch + 1}/{epochs}")
-            self.train_one_epoch(epoch)
-            val_loss, val_accuracy = self.validate()
+            train_loss, train_acc = self.train_one_epoch(epoch)
+            valid_loss, valid_acc = self.validate()
+            if valid_loss < best_valid_loss:
+                self.save_model()
+
+        best_state_dict = torch.load(self.model_path)
+        self.model.load_state_dict(best_state_dict)
+
+        metrics = {
+            "train": {
+                "loss": train_loss,
+                "acc": train_acc
+            },
+            "valid": {
+                "loss": valid_loss,
+                "acc": valid_acc
+            }
+        }
+        return metrics 
 
     def save_model(self, path):
-        torch.save(self.model.state_dict(), path)
-
-
-# Example usage
-if __name__ == "__main__":
-    # Define model, criterion, optimizer, scheduler, and dataloaders here
-    model = ...  # Your model
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model.to(device)
-
-    train_loader = ...  # Your training dataloader
-    val_loader = ...  # Your validation dataloader
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
-
-    trainer = Trainer(model, device, train_loader, val_loader, criterion, optimizer, scheduler)
-    trainer.fit(epochs=20)
-    trainer.save_model("model.pth")
+        if not self.model_path.exists():
+            self.model_path.mkdir(exist_ok=True, parents=True)
+        torch.save(self.model.state_dict(), str(self.model_path))

@@ -10,6 +10,8 @@ ROOT = Path().parent
 CACHE_DIR = ROOT / "cache"
 RAW_DATA_DIR = ROOT / "data" / "raw" / "data"
 HF_DATA_DIR = ROOT / "data" / "hf"
+MODEL_DIR = ROOT / "model" 
+RESULTS_DIR = ROOT / "results" 
 
 N_PROC = mp.cpu_count()
 

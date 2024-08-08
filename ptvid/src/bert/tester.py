@@ -29,7 +29,6 @@ class Tester:
                 labels = batch["label"].to(self.device)
 
                 logits = self.model(input_ids, attention_mask=attention_mask).squeeze(dim=1)
-
                 loss = self.loss_fn(logits, labels.float())
 
                 # If logits is bigger than 0.5, it's 1, otherwise it's 0
@@ -40,13 +39,9 @@ class Tester:
                 labels = labels.cpu()
 
                 accuracy = self.accuracy.add_batch(predictions=predictions, references=labels)
-
                 f1 = self.f1.add_batch(predictions=predictions, references=labels)
-
                 precision = self.precision.add_batch(predictions=predictions, references=labels)
-
                 recall = self.recall.add_batch(predictions=predictions, references=labels)
-
                 total_loss += loss.item()
 
             accuracy = self.accuracy.compute()["accuracy"]
@@ -62,7 +57,6 @@ class Tester:
         self.model.to(self.device)
 
         results = {}
-
         for domain in self.test_dataset_dict.keys():
             logging.info(f"Testing {domain} domain...")
             accuracy, f1, precision, recall, total_loss = self._test(self.test_dataset_dict[domain])
