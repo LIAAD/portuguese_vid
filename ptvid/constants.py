@@ -12,6 +12,7 @@ RAW_DATA_DIR = ROOT / "data" / "raw" / "data"
 HF_DATA_DIR = ROOT / "data" / "hf"
 MODEL_DIR = ROOT / "model" 
 RESULTS_DIR = ROOT / "results" 
+LOGS_DIR = ROOT / "logs" 
 
 N_PROC = mp.cpu_count()
 
