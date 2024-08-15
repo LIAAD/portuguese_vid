@@ -10,9 +10,9 @@ ROOT = Path().parent
 CACHE_DIR = ROOT / "cache"
 RAW_DATA_DIR = ROOT / "data" / "raw" / "data"
 HF_DATA_DIR = ROOT / "data" / "hf"
-MODEL_DIR = ROOT / "model" 
-RESULTS_DIR = ROOT / "results" 
-LOGS_DIR = ROOT / "logs" 
+MODEL_DIR = ROOT / "model"
+RESULTS_DIR = ROOT / "results"
+LOGS_DIR = ROOT / "logs"
 
 N_PROC = mp.cpu_count()
 
@@ -37,3 +37,6 @@ DATASET_NAME = "liaad/PtBrVId"
 
 load_dotenv(ROOT)
 HF_TOKEN = os.getenv("HF_TOKEN")
+
+
+MODEL_NAME = "neuralmind/bert-base-portuguese-cased"
