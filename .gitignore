@@ -207,3 +207,5 @@ data/
 cache/
 model/
 results/
+
+tmp/
