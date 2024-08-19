@@ -25,9 +25,13 @@ class LanguageIdentifier(torch.nn.Module):
         tokenizer = BertTokenizer.from_pretrained(self._model_name)
         probs = []
         for text in texts:
-            inputs = tokenizer(text, return_tensors="pt", )
+            inputs = tokenizer(text, return_tensors="pt")
+            # to device
+            inputs["input_ids"] = inputs["input_ids"].to(self.model.device)
+            inputs["attention_mask"] = inputs["attention_mask"].to(self.model.device)
             inputs.pop("token_type_ids")
             
             prob = self.forward(**inputs)
             probs.append(prob.item())
-        return probs
+        pred = [1 if prob > 0.5 else 0 for prob in probs]
+        return pred

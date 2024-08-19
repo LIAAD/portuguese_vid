@@ -1,32 +1,38 @@
 # Portuguese Variety Identifier
 
-Training a classifier to discriminate between European and Brazilian Portuguese.
+A classifier for distinguishing between European and Brazilian Portuguese.
 
 ## Development Environment
 
-1. Create a virtual environment. It can be done with conda by executing the following command:
+### 1. Set Up a Virtual Environment
+
+To create a virtual environment using Conda, run the following commands:
 
 ```sh
-conda create --name python=3.11 .conda 
+conda create --name .conda python=3.11
 conda activate .conda
 ```
 
-1. Install dependencies with the following command:
+### 2. Install Dependencies
+
+Install the necessary dependencies by running:
 
 ```sh
 pip install -e .
 ```
 
-3. Download raw data:
+## Training
+
+Training scripts are located in the [train](scripts/train/) folder. For example, to find the best hyperparameters for the BERT model, run:
 
 ```sh
-sh scripts/download_data.sh
+sh scripts/train/search_bert.sh
 ```
 
-### Execution
+## Evaluation
 
-#### Training
+To evaluate the trained models, execute the evaluation script:
 
-#### Evaluation
-
-
+```sh
+sh scripts/eval/run.sh
+```
