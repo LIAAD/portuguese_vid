@@ -8,10 +8,10 @@ from transformers import pipeline
 from ptvid.constants import LABEL2ID
 
 MODELS = [
-    "liaad/LVI_bert-base-portuguese-cased",
-    "liaad/LVI_bert-large-portuguese-cased",
-    "liaad/LVI_albertina-100m-portuguese-ptpt-encoder",
-    "liaad/LVI_albertina-900m-portuguese-ptpt-encoder",
+    "u1537782/LVI_bert-base-portuguese-cased",
+    "u1537782/LVI_bert-large-portuguese-cased",
+    "u1537782/LVI_albertina-100m-portuguese-ptpt-encoder",
+    "u1537782/LVI_albertina-900m-portuguese-ptpt-encoder",
 ]
 
 
@@ -22,7 +22,7 @@ def load_dsl():
 
 
 def load_frmt():
-    frmt = datasets.load_dataset("hugosousa/frmt", split="test")
+    frmt = datasets.load_dataset("u1537782/frmt", split="test")
     pt = [text for text in frmt["pt"] if text]
     br = [text for text in frmt["br"] if text]
 

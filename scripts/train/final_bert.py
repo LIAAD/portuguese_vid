@@ -33,7 +33,7 @@ LR = 1e-5
 
 train_dataset = []
 for domain in DOMAINS:
-    domain_data = datasets.load_dataset("liaad/PtBrVId", domain, split="train")
+    domain_data = datasets.load_dataset("u1537782/PtBrVId", domain, split="train")
     label0 = domain_data.filter(lambda x: x["label"] == 0, num_proc=mp.cpu_count())
     label1 = domain_data.filter(lambda x: x["label"] == 1, num_proc=mp.cpu_count())
     train_dataset.append(label0.select(range(3000)))
@@ -41,7 +41,7 @@ for domain in DOMAINS:
 train_dataset = datasets.concatenate_datasets(train_dataset)
 
 valid_dataset = datasets.concatenate_datasets(
-    [datasets.load_dataset("liaad/PtBrVId", domain, split="valid") for domain in DOMAINS]
+    [datasets.load_dataset("u1537782/PtBrVId", domain, split="valid") for domain in DOMAINS]
 )
 
 
@@ -92,7 +92,7 @@ def load_dsl():
 
 
 def load_frmt():
-    frmt = datasets.load_dataset("hugosousa/frmt", split="test")
+    frmt = datasets.load_dataset("u1537782/frmt", split="test")
     pt = [text for text in frmt["pt"] if text]
     br = [text for text in frmt["br"] if text]
 

@@ -32,8 +32,8 @@ SAMPLE_SIZE = 3_000
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-RAW_DATASET_NAME = "arubenruben/portuguese-language-identification-raw"
-DATASET_NAME = "liaad/PtBrVId"
+RAW_DATASET_NAME = "u1537782/portuguese-language-identification-raw"
+DATASET_NAME = "u1537782/PtBrVId"
 
 load_dotenv(ROOT)
 HF_TOKEN = os.getenv("HF_TOKEN")
