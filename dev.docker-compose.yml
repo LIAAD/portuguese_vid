@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  streamlit:
+    build: 
+      context: ./streamlit
+      dockerfile: dev.Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./streamlit:/app
+    networks:
+      - vid
+
+  fast-api:
+    build: 
+      context: ./fast-api
+      dockerfile: dev.Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fast-api:/app
+
+    networks:
+      - vid

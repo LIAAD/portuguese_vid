@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ptvid"
+description = "Identify the variety of Portuguese used in a text."
+readme = "README.md"
+version = "0.0.1"
+dependencies = [
+    "pandas>=2.2.1",
+    "tqdm>=4.66.2",
+    "environs>=10.3.0",
+]
+
+requires-python = "~=3.11"
+
+[project.optional-dependencies]
+test = ["pytest==7.4.3"]
+lint = ["ruff"]
+notebook = [    
+    "ipykernel==6.28.0",
+    "ipywidgets==8.1.1",
+    "matplotlib==3.8.3",
+    "python-dotenv==1.0.1",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.ruff]
+exclude = [".conda"]
+line-length = 120

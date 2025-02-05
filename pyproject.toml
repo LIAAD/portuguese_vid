@@ -1,50 +1,84 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
 
-[project]
-name = "ptvid"
-description = "Identify the variety of Portuguese used in a text."
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+
+["project"]
+name = "pt_vid"
+dynamic = ["version"] 
+description = "Process Gantt Chart"
 readme = "README.md"
-version = "0.0.1"
+
+authors = [
+    {name = "Rúben Almeida", email = "ruben.almeida@innovpoint.com"},
+
+]
+requires-python = ">=3.10"
+
 dependencies = [
+    "pandas>=2.2.1",
+    "tqdm>=4.66.2",
+    "environs>=10.3.0",
+    "jupyter>=1.1.1",
+    "notebook>=7.3.2",
+]
+
+[project.optional-dependencies]
+
+langdetect = [
+    "fasttext-langdetect>=1.0.5",
+]
+
+data-cleaning = [
+    "cleantext[gpl]>=1.1.4",
+    "justext==3.0.1",
+
+    "beautifulsoup4>=4.12.3",
+    "zstandard>=0.22.0",
+    "lxml>=5.2.1",
+]
+
+huggingface = [
     "accelerate>=0.27.0",
     "torch>=2.2.1",
     "transformers>=4.38.1",
     "datasets>=2.17.1",
-    "pandas>=2.2.1",
-    "tqdm>=4.66.2",
     "huggingface_hub>=0.21.3",
     "evaluate>=0.4.1",
-    "pytest>=8.0.2",
-    "evaluate>=0.4.1",
+]
+
+sklearn = [
     "scikit-learn>=1.4.1",
-    "environs>=10.3.0",
-    "beautifulsoup4>=4.12.3",
-    "zstandard>=0.22.0",
-    "lxml>=5.2.1",
-    "cleantext>=1.1.4",
-    "fasttext-langdetect>=1.0.5",
-    "justext==3.0.1",
     "imbalanced-learn==0.12.3",
-    "spacy==3.7.5"
 ]
 
-requires-python = "~=3.11"
-
-[project.optional-dependencies]
-test = ["pytest==7.4.3"]
-lint = ["ruff"]
-notebook = [    
-    "ipykernel==6.28.0",
-    "ipywidgets==8.1.1",
-    "matplotlib==3.8.3",
-    "python-dotenv==1.0.1",
+spacy = [
+    "spacy==3.7.5",
 ]
 
-[tool.hatch.metadata]
-allow-direct-references = true
+demo = [
+    "fastapi[standard]>=0.115.2",
+    "streamlit>=1.42.0"
+]
 
-[tool.ruff]
-exclude = [".conda"]
-line-length = 120
+test = [
+    "pytest>=8.3.3"
+]
+
+dev = [
+    "pt_vid[langdetect]",
+    "pt_vid[data-cleaning]",
+    "pt_vid[huggingface]",
+    "pt_vid[sklearn]",
+    "pt_vid[spacy]",
+    "pt_vid[demo]",
+    "pt_vid[test]"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pt_vid", "pt_vid.*"]
+namespaces = false
+
+[tool.setuptools_scm]
