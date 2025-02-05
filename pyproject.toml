@@ -11,7 +11,8 @@ description = "Process Gantt Chart"
 readme = "README.md"
 
 authors = [
-    {name = "Rúben Almeida", email = "ruben.almeida@innovpoint.com"},
+    {name = "Rúben Almeida", email = "ruben.f.almeida@inesctec.pt"},
+    {name = "Hugo Sousa", email = "hugo.o.sousa@inesctec.pt"}
 
 ]
 requires-python = ">=3.10"
