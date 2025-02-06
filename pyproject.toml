@@ -35,7 +35,7 @@ langdetect = [
 data-cleaning = [
     "cleantext[gpl]>=1.1.4",
     "justext==3.0.1",
-
+    "nltk>=3.9.1",
     "beautifulsoup4>=4.12.3",
     "zstandard>=0.22.0",
     "lxml>=5.2.1",

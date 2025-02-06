@@ -1,6 +1,9 @@
-from datasets import Dataset
+from datasets import load_dataset
+from pt_vid.entity.VIDDataset import VIDDataset
 from pt_vid.data.generators.Generator import Generator
 
 class GenerateWeb(Generator):
-    def generate(self)->Dataset:
-        raise NotImplementedError('GenerateWeb.generate is not implemented')
+    def generate(self)->VIDDataset:
+        return VIDDataset(
+            raw_dataset=load_dataset('arubenruben/OSCAR-PT-BR-100K', split='train')
+        )

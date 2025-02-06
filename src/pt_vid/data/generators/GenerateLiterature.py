@@ -1,6 +1,11 @@
-from datasets import Dataset
+from pt_vid.entity.VIDDataset import VIDDataset
 from pt_vid.data.generators.Generator import Generator
+from datasets import load_dataset, concatenate_datasets
 
 class GenerateLiterature(Generator):
-    def generate(self)->Dataset:
-        raise NotImplementedError('GenerateLiterature.generate is not implemented')
+    def generate(self)->VIDDataset:
+        raw_dataset = load_dataset('arubenruben/brazilian_literature')
+
+        return VIDDataset(
+            raw_dataset=concatenate_datasets([raw_dataset['train'], raw_dataset['test']])
+        )
