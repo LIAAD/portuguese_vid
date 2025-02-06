@@ -1,0 +1,2 @@
+PT_BR_LABEL = 0
+PT_PT_LABEL = 1

@@ -7,5 +7,6 @@ class GenerateLiterature(Generator):
         raw_dataset = load_dataset('arubenruben/brazilian_literature')
 
         return VIDDataset(
-            raw_dataset=concatenate_datasets([raw_dataset['train'], raw_dataset['test']])
+            dataset=concatenate_datasets([raw_dataset['train'], raw_dataset['test']]),
+            config_name='literature'
         )

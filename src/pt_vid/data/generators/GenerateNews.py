@@ -7,5 +7,6 @@ class GenerateNews(Generator):
         dataset_dict = load_dataset('arubenruben/cetem')
 
         return VIDDataset(
-            raw_dataset=concatenate_datasets([dataset_dict['train'], dataset_dict['test']])
+            dataset=concatenate_datasets([dataset_dict['train'], dataset_dict['test']]),
+            config_name='news'
         )

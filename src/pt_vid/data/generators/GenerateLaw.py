@@ -4,4 +4,4 @@ from pt_vid.data.generators.Generator import Generator
 
 class GenerateLaw(Generator):
     def generate(self)->VIDDataset:
-        raise NotImplementedError('GenerateSocialMedia.generate is not implemented')
+        raise NotImplementedError('GenerateLaw.generate is not implemented')

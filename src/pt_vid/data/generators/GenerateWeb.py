@@ -5,5 +5,6 @@ from pt_vid.data.generators.Generator import Generator
 class GenerateWeb(Generator):
     def generate(self)->VIDDataset:
         return VIDDataset(
-            raw_dataset=load_dataset('arubenruben/OSCAR-PT-BR-100K', split='train')
+            dataset=load_dataset('arubenruben/OSCAR-PT-BR-100K', split='train'),
+            config_name='web'
         )

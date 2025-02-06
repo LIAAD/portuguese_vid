@@ -7,5 +7,6 @@ class GenerateSocialMedia(Generator):
         raw_dataset = load_dataset('arubenruben/hate_br_li')
 
         return VIDDataset(
-            raw_dataset=concatenate_datasets([raw_dataset['train'], raw_dataset['test']])
+            dataset=concatenate_datasets([raw_dataset['train'], raw_dataset['test']]),
+            config_name='social_media'
         )
