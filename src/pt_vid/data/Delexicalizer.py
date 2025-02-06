@@ -1,8 +1,5 @@
-import random
-
 import spacy
-
-
+import random
 class Delexicalizer:
     def __init__(self, prob_pos_tag: float, prob_ner_tag: float, spacy_model: str = "pt_core_news_sm") -> None:
         if spacy_model not in spacy.util.get_installed_models():

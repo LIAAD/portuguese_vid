@@ -23,6 +23,7 @@ dependencies = [
     "environs>=10.3.0",
     "jupyter>=1.1.1",
     "notebook>=7.3.2",
+    "pydantic>=2.10.6",
 ]
 
 [project.optional-dependencies]
@@ -60,7 +61,10 @@ spacy = [
 
 demo = [
     "fastapi[standard]>=0.115.2",
-    "streamlit>=1.42.0"
+    "streamlit>=1.42.0",
+    "pt_vid[huggingface]",
+    "pt_vid[langdetect]",
+    "pt_vid[demo]",
 ]
 
 test = [
