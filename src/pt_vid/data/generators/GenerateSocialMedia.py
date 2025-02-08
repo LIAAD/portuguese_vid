@@ -3,7 +3,8 @@ from pt_vid.data.generators.Generator import Generator
 from datasets import load_dataset, concatenate_datasets
 
 class GenerateSocialMedia(Generator):
-    def generate(self)->VIDDataset:
+    @staticmethod
+    def generate()->VIDDataset:
         raw_dataset = load_dataset('arubenruben/hate_br_li')
 
         return VIDDataset(
