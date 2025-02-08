@@ -27,10 +27,10 @@ corpora_stats = CorporaStats(
 
 print(corpora_stats.model_dump())
 
+# Clean the dataset (create additional column)
+
 # Split the dataset
 
 # Sample the dataset
-
-# Clean the dataset (create additional column)
 
 # Save based on multiple_configs

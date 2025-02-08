@@ -1,8 +1,7 @@
-import nltk
 from typing import Optional
 from pt_vid.entity.Entity import Entity
-from nltk.tokenize import word_tokenize
 from pydantic import Field, model_validator
+from pt_vid.data.Tokenizer import Tokenizer
 
 nltk.download('punkt_tab')
 
@@ -23,7 +22,7 @@ class DatasetStats(Entity):
         return self
 
     def _set_num_tokens(self, document):
-        document['num_tokens'] = len(word_tokenize(document['text'], language="portuguese"))
+        document['num_tokens'] = len(Tokenizer.tokenize(document['text']))
         return document
     
     @model_validator(mode='after')

@@ -1,6 +1,4 @@
 from typing import List
-from datasets import Dataset
-from nltk.tokenize import word_tokenize
 from pt_vid.entity.DatasetStats import DatasetStats
 from pt_vid.entity.CorporaStats import CorporaStats as CorporaStatsEntity
 
