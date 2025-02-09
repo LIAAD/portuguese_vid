@@ -36,10 +36,7 @@ class CleanupStrategy(Strategy):
     
     @staticmethod
     def run(dataset):
-        dataset = dataset.map(CleanupStrategy._run)
-
-        for row in range(len(dataset)):
-            dataset[row]['text'] = CleanupStrategy._run(dataset[row]['text'])
+        dataset = dataset.map(lambda example: CleanupStrategy._run(example))
         
         # Remove empty rows
         dataset = dataset.filter(lambda example: len(example['text']) > 0)

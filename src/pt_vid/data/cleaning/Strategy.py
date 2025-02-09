@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class Strategy(ABC):
     @staticmethod
     @abstractmethod
-    def _run(text:str)->str:
+    def _run(row)->str:
         raise NotImplementedError("Subclasses must implement this method")
 
     @staticmethod
