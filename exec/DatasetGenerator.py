@@ -1,8 +1,10 @@
 from tqdm import tqdm
 from pt_vid.data.Cleaner import Cleaner
+from pt_vid.data.Splitter import Splitter
 from pt_vid.entity.CorporaStats import CorporaStats
 from pt_vid.data.generators.GenerateWeb import GenerateWeb
 from pt_vid.data.generators.GenerateNews import GenerateNews
+from pt_vid.data.splitters.DefaultSplitterStrategy import DefaultSplitterStrategy
 
 domains = {}
 
@@ -25,11 +27,12 @@ corpora_stats = CorporaStats(
 print(corpora_stats.model_dump())
 
 # Clean the dataset (create additional column)
-Cleaner.run(domains['web'].dataset, domain='web')
-
+web_dataset = Cleaner.run(domains['web'].dataset, domain='web')
 
 # Split the dataset
+splitter = Splitter(strategy=DefaultSplitterStrategy)
 
+splitter.run(web_dataset, domain='web')
 # Sample the dataset
 
 # Save based on multiple_configs
