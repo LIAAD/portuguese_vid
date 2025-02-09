@@ -87,4 +87,8 @@ where = ["src"]
 include = ["pt_vid", "pt_vid.*"]
 namespaces = false
 
+[tool.setuptools.package-data]
+"pt_vid" = ["*.json"]
+
+
 [tool.setuptools_scm]

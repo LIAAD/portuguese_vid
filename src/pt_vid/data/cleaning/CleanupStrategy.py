@@ -35,7 +35,7 @@ class CleanupStrategy(Strategy):
         return row
     
     @staticmethod
-    def run(dataset):
+    def run(dataset, domain):
         dataset = dataset.map(lambda example: CleanupStrategy._run(example))
         
         # Remove empty rows

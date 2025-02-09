@@ -95,7 +95,7 @@ class DetokenizerStrategy(Strategy):
         return text.strip()
 
 
-    def run(dataset):
+    def run(dataset, domain):
         for row in dataset:
             row["text"] = DetokenizerStrategy._run(row["text"])
 

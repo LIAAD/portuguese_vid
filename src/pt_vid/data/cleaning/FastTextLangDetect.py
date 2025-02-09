@@ -14,7 +14,7 @@ class FastTextLangDetect(Strategy):
 
         return row
         
-    def run(dataset):
+    def run(dataset, domain):
         dataset = dataset.map(lambda example: FastTextLangDetect._run(example))
         # Filter out rows that are not in Portuguese
         dataset = dataset.filter(lambda example: example['lang'] == 'pt')

@@ -25,7 +25,7 @@ corpora_stats = CorporaStats(
 print(corpora_stats.model_dump())
 
 # Clean the dataset (create additional column)
-Cleaner.run(domains['web'].dataset)
+Cleaner.run(domains['web'].dataset, domain='web')
 
 
 # Split the dataset

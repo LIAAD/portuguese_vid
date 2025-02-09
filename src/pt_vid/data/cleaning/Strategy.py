@@ -9,5 +9,5 @@ class Strategy(ABC):
 
     @staticmethod
     @abstractmethod
-    def run(dataset:Dataset)->Dataset:
+    def run(dataset:Dataset, domain:str = None)->Dataset:
         raise NotImplementedError("Subclasses must implement this method")
