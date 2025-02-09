@@ -1,11 +1,8 @@
 from tqdm import tqdm
+from pt_vid.data.Cleaner import Cleaner
 from pt_vid.entity.CorporaStats import CorporaStats
-from pt_vid.data.generators.GenerateLaw import GenerateLaw
 from pt_vid.data.generators.GenerateWeb import GenerateWeb
 from pt_vid.data.generators.GenerateNews import GenerateNews
-from pt_vid.data.generators.GeneratePolitics import GeneratePolitics
-from pt_vid.data.generators.GenerateLiterature import GenerateLiterature
-from pt_vid.data.generators.GenerateSocialMedia import GenerateSocialMedia
 
 domains = {}
 
@@ -28,6 +25,8 @@ corpora_stats = CorporaStats(
 print(corpora_stats.model_dump())
 
 # Clean the dataset (create additional column)
+Cleaner.run(domains['web'].dataset)
+
 
 # Split the dataset
 

@@ -96,6 +96,7 @@ class DetokenizerStrategy(Strategy):
 
 
     def run(dataset):
-        """Detokenize the text in the dataset."""
-        dataset["text"] = dataset["text"].apply(DetokenizerStrategy._run)
+        for row in dataset:
+            row["text"] = DetokenizerStrategy._run(row["text"])
+
         return dataset

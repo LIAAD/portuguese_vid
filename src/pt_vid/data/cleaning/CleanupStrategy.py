@@ -28,17 +28,20 @@ class CleanupStrategy(Strategy):
         )
     
     @staticmethod
-    def _run(text):
-        text = CleanupStrategy._clean_nan(text)
-        text = CleanupStrategy._clean_text(text)
+    def _run(row):
+        row['text'] = CleanupStrategy._clean_nan(row['text'])
+        row['text'] = CleanupStrategy._clean_text(row['text'])
 
-        return text
+        return row
     
     @staticmethod
     def run(dataset):
-        dataset['text'] = dataset['text'].apply(CleanupStrategy._run)
+        dataset = dataset.map(CleanupStrategy._run)
 
-        # Drop rows with empty text
-        dataset = dataset[dataset['text'] != '']
-
+        for row in range(len(dataset)):
+            dataset[row]['text'] = CleanupStrategy._run(dataset[row]['text'])
+        
+        # Remove empty rows
+        dataset = dataset.filter(lambda example: len(example['text']) > 0)
+        
         return dataset

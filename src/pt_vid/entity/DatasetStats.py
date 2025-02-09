@@ -3,8 +3,6 @@ from pt_vid.entity.Entity import Entity
 from pydantic import Field, model_validator
 from pt_vid.data.Tokenizer import Tokenizer
 
-nltk.download('punkt_tab')
-
 class DatasetStats(Entity):
     dataset: object
     config_name: Optional[str] = Field(None, description='The name of the dataset configuration')

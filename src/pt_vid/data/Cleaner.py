@@ -1,12 +1,13 @@
+from tqdm import tqdm
+from datasets import Dataset
 from pt_vid.data.cleaning.CleanupStrategy import CleanupStrategy
 from pt_vid.data.cleaning.FastTextLangDetect import FastTextLangDetect
 from pt_vid.data.cleaning.DetokenizerStrategy import DetokenizerStrategy
-
 class Cleaner:
-    def run(raw_text:str):
-        for strategy in [DetokenizerStrategy, FastTextLangDetect, CleanupStrategy]:
-            raw_text = strategy().run(raw_text)
+    def run(dataset:Dataset):
+        for strategy in tqdm([DetokenizerStrategy, CleanupStrategy, FastTextLangDetect]):
+            print(f'Running {strategy.__name__}')
+            # TODO: Print the number of rows removed
+            dataset = strategy.run(dataset)
         
-        raw_text = DetokenizerStrategy().run(raw_text)
-    
-        raise NotImplementedError("This method should be implemented by the child class")
+        return dataset

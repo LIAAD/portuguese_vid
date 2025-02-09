@@ -2,12 +2,12 @@ from datasets import Dataset
 from abc import ABC, abstractmethod
 
 class Strategy(ABC):
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def _run(text:str)->str:
         raise NotImplementedError("Subclasses must implement this method")
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def run(dataset:Dataset)->Dataset:
         raise NotImplementedError("Subclasses must implement this method")
