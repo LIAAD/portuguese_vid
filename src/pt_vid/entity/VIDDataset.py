@@ -12,7 +12,7 @@ class VIDDataset(Entity):
     )
     @model_validator(mode='after')
     def debug_sample_dataset(self):
-        self.dataset = self.dataset.shuffle(seed=42).select(range(100))
+        self.dataset = self.dataset.shuffle(seed=42).select(range(300))
         return self
     
     @model_validator(mode='after')

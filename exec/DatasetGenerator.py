@@ -1,5 +1,6 @@
 from tqdm import tqdm
 from pt_vid.data.Cleaner import Cleaner
+from pt_vid.data.Sampler import Sampler
 from pt_vid.data.Splitter import Splitter
 from pt_vid.entity.CorporaStats import CorporaStats
 from pt_vid.data.generators.GenerateWeb import GenerateWeb
@@ -32,7 +33,10 @@ web_dataset = Cleaner.run(domains['web'].dataset, domain='web')
 # Split the dataset
 splitter = Splitter(strategy=DefaultSplitterStrategy)
 
-splitter.run(web_dataset, domain='web')
+dataset_dict = splitter.run(web_dataset, domain='web')
+
 # Sample the dataset
+dataset_dict = Sampler.run(dataset_dict)
 
 # Save based on multiple_configs
+print(dataset_dict)

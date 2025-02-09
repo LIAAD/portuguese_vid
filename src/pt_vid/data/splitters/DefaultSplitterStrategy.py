@@ -7,7 +7,7 @@ from pt_vid.data.splitters.Strategy import Strategy
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class DefaultSplitterStrategy(Strategy):
-    DEFAULT_SPLITS: dict = json.load(open(os.path.join(CURRENT_DIR, 'default_splits.json')))
+    DEFAULT_SPLITS: dict = json.load(open(os.path.join(CURRENT_DIR, 'default_test_splits.json')))
     
     @staticmethod
     def run(dataset, domain)->DatasetDict:
