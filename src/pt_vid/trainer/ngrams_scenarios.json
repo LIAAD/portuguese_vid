@@ -1,0 +1,20 @@
+{
+    "low": {
+        "tf_idf_max_features": 500,
+        "tf_idf_ngram_range": [
+            1,
+            2
+        ],
+        "tf_idf_lower_case": true,
+        "tf_idf_analyzer": "word"
+    },
+    "medium": {
+        "tf_idf_max_features": 1000,
+        "tf_idf_ngram_range": [
+            1,
+            2
+        ],
+        "tf_idf_lower_case": true,
+        "tf_idf_analyzer": "word"
+    }
+}
