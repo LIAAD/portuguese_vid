@@ -42,7 +42,7 @@ class NgramsTrainer(Strategy):
                 
         self.pipeline = Pipeline([
             ("tf_idf", TfidfVectorizer(
-                tokenizer=lambda x: Tokenizer().tokenize(x),
+                tokenizer=lambda x: nltk.word_tokenize(x, language="portuguese"),
                 stop_words=nltk.corpus.stopwords.words("portuguese"),
                 token_pattern=None
             )),
@@ -60,9 +60,8 @@ class NgramsTrainer(Strategy):
             self.pipeline,
             self.sklearn_parameters,
             scoring=scoring,
-            refit='f1',  # Use F1 score to select the best model
-            n_jobs=2,
-            #n_iter=500,
+            refit='f1', # Use F1 score to select the best model
+            n_jobs=2,            
             cv=self.cv,
             error_score="raise",
             verbose=10,
@@ -75,11 +74,11 @@ class NgramsTrainer(Strategy):
         text = self.training_dataset["text"]
         labels = self.training_dataset["label"]
         
-        for p_pos_delexicalization in tqdm([0, 0.25, 0.5, 0.75, 1]):
-            for p_neg_delexicalization in tqdm([0, 0.25, 0.5, 0.75, 1]):
+        for p_pos in tqdm([0, 0.25, 0.5, 0.75, 1]):
+            for p_ner in tqdm([0, 0.25, 0.5, 0.75, 1]):
                 delexicalizer = Delexicalizer(
-                    prob_ner_tag=p_neg_delexicalization, 
-                    prob_pos_tag=p_pos_delexicalization,
+                    prob_ner_tag=p_ner, 
+                    prob_pos_tag=p_pos,
                 )
                 
                 new_text = [delexicalizer.delexicalize(t) for t in text]
@@ -87,13 +86,13 @@ class NgramsTrainer(Strategy):
                 result = self.search.fit(np.array(new_text), np.array(labels))
 
                 results.append(NgramsTrainingResult(
-                    best_pipeline=result.best_estimator_,
+                    model=result.best_estimator_,
                     best_tf_idf_max_features=result.best_params_["tf_idf__max_features"],
                     best_tf_idf_ngram_range=result.best_params_["tf_idf__ngram_range"],
                     best_tf_idf_lower_case=result.best_params_["tf_idf__lowercase"],
                     best_tf_idf_analyzer=result.best_params_["tf_idf__analyzer"],
-                    p_pos_delexicalization=p_pos_delexicalization,
-                    p_neg_delexicalization=p_neg_delexicalization,
+                    p_pos=p_pos,
+                    p_ner=p_ner,
                     mean_f1_train=result.cv_results_["mean_test_f1"].mean(),
                     mean_accuracy_train=self.search.cv_results_["mean_test_accuracy"].mean(),
                     best_f1_train=result.best_score_

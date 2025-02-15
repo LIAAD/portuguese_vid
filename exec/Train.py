@@ -23,7 +23,7 @@ if env.bool('DEBUG', False):
     training_dataset = concatenate_datasets([training_dataset_with_label_0, training_dataset_with_label_1])
 else:
     training_dataset = dataset['train']
-    
+
 # Train N-Grams model
 training_results = Trainer(
     training_strategy=NgramsTrainer(
