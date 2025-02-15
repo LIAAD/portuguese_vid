@@ -1,4 +1,5 @@
 from environs import Env
+from joblib import dump, load
 from pt_vid.Trainer import Trainer
 from pt_vid.trainer.HFTrainer import HFTrainer
 from pt_vid.trainer.NgramsTrainer import NgramsTrainer

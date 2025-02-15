@@ -4,8 +4,8 @@ import nltk
 import numpy as np
 from tqdm import tqdm
 from sklearn.pipeline import Pipeline
-from sklearn.naive_bayes import BernoulliNB
 from pt_vid.data.Tokenizer import Tokenizer
+from sklearn.naive_bayes import BernoulliNB
 from pt_vid.trainer.Strategy import Strategy
 from pt_vid.data.Delexicalizer import Delexicalizer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -19,6 +19,8 @@ if not nltk.download('stopwords'):
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
+def tokenizer(text):
+    return Tokenizer.tokenize(text)
 class NgramsTrainer(Strategy):
     def __init__(self, 
                  training_dataset, 
@@ -42,7 +44,7 @@ class NgramsTrainer(Strategy):
                 
         self.pipeline = Pipeline([
             ("tf_idf", TfidfVectorizer(
-                tokenizer=lambda x: nltk.word_tokenize(x, language="portuguese"),
+                tokenizer=tokenizer,
                 stop_words=nltk.corpus.stopwords.words("portuguese"),
                 token_pattern=None
             )),
@@ -86,7 +88,7 @@ class NgramsTrainer(Strategy):
                 result = self.search.fit(np.array(new_text), np.array(labels))
 
                 results.append(NgramsTrainingResult(
-                    model=result.best_estimator_,
+                    best_pipeline=result.best_estimator_,
                     best_tf_idf_max_features=result.best_params_["tf_idf__max_features"],
                     best_tf_idf_ngram_range=result.best_params_["tf_idf__ngram_range"],
                     best_tf_idf_lower_case=result.best_params_["tf_idf__lowercase"],

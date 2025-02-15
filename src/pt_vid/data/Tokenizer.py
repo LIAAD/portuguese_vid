@@ -8,6 +8,5 @@ if not nltk.download('punkt_tab'):
 
 class Tokenizer:
     @staticmethod
-    @staticmethod
     def tokenize(text):
         return nltk.word_tokenize(text, language="portuguese")

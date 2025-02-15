@@ -8,8 +8,9 @@ class Ngrams(Model):
         self.pipeline = pipeline
     
     def inference(self, x:str)->InferenceResult:
-        results = self.pipeline.predict([x])
+        results_proba = self.pipeline.predict_proba([x])
         
         return InferenceResult(
-
+            br_prob=results_proba[0][1],
+            pt_prob=results_proba[0][0]
         )
