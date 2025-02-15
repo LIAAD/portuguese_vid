@@ -8,3 +8,6 @@ class NgramsTrainingResult(TrainingResult):
     best_tf_idf_lower_case: bool
     best_tf_idf_analyzer: Literal["word", "char"]
     best_pipeline: object
+    mean_f1_train: float
+    mean_accuracy_train: float
+    best_f1_train: float

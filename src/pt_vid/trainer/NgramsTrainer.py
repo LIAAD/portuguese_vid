@@ -3,13 +3,13 @@ import json
 import nltk
 import numpy as np
 from tqdm import tqdm
-from copy import deepcopy
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import BernoulliNB
 from pt_vid.data.Tokenizer import Tokenizer
 from pt_vid.trainer.Strategy import Strategy
 from pt_vid.data.Delexicalizer import Delexicalizer
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import f1_score, make_scorer, accuracy_score
 from pt_vid.entity.NgramsTrainingResult import NgramsTrainingResult
 from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold
 from pt_vid.entity.NgramsTrainingScenario import NgramsTrainingScenario
@@ -20,7 +20,13 @@ if not nltk.download('stopwords'):
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class NgramsTrainer(Strategy):
-    def __init__(self, training_dataset, validation_dataset = None, eval_dataset = None, parameters_filepath=None, *args, **kwargs):
+    def __init__(self, 
+                 training_dataset, 
+                 validation_dataset = None, 
+                 eval_dataset = None, 
+                 parameters_filepath=None, 
+                 scoring=None,
+                 *args, **kwargs):
         super().__init__(training_dataset, validation_dataset, eval_dataset, *args, **kwargs)        
         self.parameters_filepath = parameters_filepath or os.path.join(CURRENT_DIR, 'ngrams_scenarios.json')
         
@@ -33,8 +39,7 @@ class NgramsTrainer(Strategy):
             }))
 
         self.sklearn_parameters = NgramsTrainingScenario.concatenate_dumps(self.parameters)
-        
-        
+                
         self.pipeline = Pipeline([
             ("tf_idf", TfidfVectorizer(
                 tokenizer=lambda x: Tokenizer().tokenize(x),
@@ -46,15 +51,22 @@ class NgramsTrainer(Strategy):
         
         self.cv = StratifiedKFold(n_splits=2, random_state=42, shuffle=True)
         
+        scoring = {
+            'f1': make_scorer(f1_score),
+            'accuracy': make_scorer(accuracy_score)
+        }
+        
         self.search = RandomizedSearchCV(
             self.pipeline,
             self.sklearn_parameters,
-            scoring="f1_macro",
+            scoring=scoring,
+            refit='f1',  # Use F1 score to select the best model
             n_jobs=2,
             #n_iter=500,
             cv=self.cv,
             error_score="raise",
-            verbose=10
+            verbose=10,
+            return_train_score=True,
         )
         
     def train(self):
@@ -82,6 +94,9 @@ class NgramsTrainer(Strategy):
                     best_tf_idf_analyzer=result.best_params_["tf_idf__analyzer"],
                     p_pos_delexicalization=p_pos_delexicalization,
                     p_neg_delexicalization=p_neg_delexicalization,
+                    mean_f1_train=result.cv_results_["mean_test_f1"].mean(),
+                    mean_accuracy_train=self.search.cv_results_["mean_test_accuracy"].mean(),
+                    best_f1_train=result.best_score_
                 ))
                 
         return results
