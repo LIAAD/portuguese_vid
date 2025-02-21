@@ -23,13 +23,12 @@ def tokenizer(text):
     return Tokenizer.tokenize(text)
 class NgramsTrainer(Strategy):
     def __init__(self, 
-                 training_dataset, 
-                 validation_dataset = None, 
-                 eval_dataset = None, 
+                 training_dataset,
+                 training_datasets_names,
                  parameters_filepath=None, 
                  scoring=None,
                  *args, **kwargs):
-        super().__init__(training_dataset, validation_dataset, eval_dataset, *args, **kwargs)        
+        super().__init__(training_dataset, training_datasets_names, *args, **kwargs)        
         self.parameters_filepath = parameters_filepath or os.path.join(CURRENT_DIR, 'ngrams_scenarios.json')
         
         self.parameters = []
@@ -97,7 +96,8 @@ class NgramsTrainer(Strategy):
                     p_ner=p_ner,
                     mean_f1_train=result.cv_results_["mean_test_f1"].mean(),
                     mean_accuracy_train=self.search.cv_results_["mean_test_accuracy"].mean(),
-                    best_f1_train=result.best_score_
+                    best_f1_train=result.best_score_,
+                    training_datasets_names=self.training_datasets_names
                 ))
                 
         return results

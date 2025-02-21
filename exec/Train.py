@@ -28,7 +28,9 @@ else:
 # Train N-Grams model
 training_results = Trainer(
     training_strategy=NgramsTrainer(
-        training_dataset=training_dataset
+        training_dataset=training_dataset,
+        training_datasets_names=['PtBrVId-Web']
 )).train()
 
-pass
+with open('training_results.joblib', 'wb') as f:
+    dump(training_results, f)

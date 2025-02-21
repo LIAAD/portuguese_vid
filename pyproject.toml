@@ -24,7 +24,7 @@ dependencies = [
     "jupyter>=1.1.1",
     "notebook>=7.3.2",
     "pydantic>=2.10.6",
-    "numpy>=2.2.2",
+    "numpy==1.26.4",
 ]
 
 [project.optional-dependencies]
@@ -72,6 +72,10 @@ test = [
     "pytest>=8.3.3"
 ]
 
+stats = [
+    "plotly>=6.0.0"
+]
+
 dev = [
     "pt_vid[langdetect]",
     "pt_vid[data-cleaning]",
@@ -79,7 +83,8 @@ dev = [
     "pt_vid[sklearn]",
     "pt_vid[spacy]",
     "pt_vid[demo]",
-    "pt_vid[test]"
+    "pt_vid[test]",
+    "pt_vid[stats]",
 ]
 
 [tool.setuptools.packages.find]
