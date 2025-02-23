@@ -98,3 +98,5 @@ namespaces = false
 
 
 [tool.setuptools_scm]
+write_to = {{…}}
+local_scheme = "no-local-version"
