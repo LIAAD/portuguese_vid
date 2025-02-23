@@ -6,6 +6,7 @@ on:
             - main
             - master
             - demo
+            - develop
 
 jobs:
     run_unit_tests:
