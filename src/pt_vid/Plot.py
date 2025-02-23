@@ -46,6 +46,7 @@ class Plot:
                     labels=dict(x="p_pos", y="p_ner", color=metric),
                     x=p_pos,
                     y=p_ner,
+                    text_auto=True,
                 )
 
                 figs.append(fig)

@@ -13,5 +13,8 @@ for training_result in training_results:
     test_result = Evaluate.test(training_result, test_dataset, "LCA-PORVID/frmt")
     test_results.append(test_result)
 
-Plot.heatmap(test_results)
-    
+heatmaps = Plot.heatmap(test_results)
+
+for idx, heatmap in enumerate(heatmaps):
+    heatmap.write_image(f"fig{idx}.png")
+    #heatmap.show()

@@ -73,7 +73,8 @@ test = [
 ]
 
 stats = [
-    "plotly>=6.0.0"
+    "plotly>=6.0.0",
+    "kaleido"
 ]
 
 dev = [
