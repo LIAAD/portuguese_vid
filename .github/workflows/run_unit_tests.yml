@@ -1,10 +1,7 @@
 name: Run unit tests
 
-on: 
-    push:
-        branches:
-            - main
-            - develop
+on:
+  workflow_call:
 
 jobs:
     # Run unit tests
