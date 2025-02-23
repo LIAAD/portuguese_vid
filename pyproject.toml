@@ -96,7 +96,6 @@ namespaces = false
 [tool.setuptools.package-data]
 "pt_vid" = ["*.json"]
 
-
 [tool.setuptools_scm]
-write_to = {{…}}
+write_to = "pt_vid/_version.py"
 local_scheme = "no-local-version"
