@@ -24,7 +24,8 @@ jobs:
             - name: Load Build artifacts
               uses: actions/download-artifact@v4
               with:
-                name: package            
+                name: package
+                path: dist/            
             - name: Set up Python 3.10
               uses: actions/setup-python@v5
               with:
