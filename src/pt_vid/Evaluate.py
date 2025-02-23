@@ -1,5 +1,4 @@
 from tqdm import tqdm
-from pt_vid.models.Model import Model
 from pt_vid.entity.TestResult import TestResult
 from sklearn.metrics import accuracy_score, f1_score
 from pt_vid.entity.TrainingResult import TrainingResult
