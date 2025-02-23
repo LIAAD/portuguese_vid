@@ -1,1 +1,0 @@
-python scripts/eval/evaluate.py
