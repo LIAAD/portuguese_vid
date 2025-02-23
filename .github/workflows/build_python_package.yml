@@ -1,14 +1,10 @@
-name: Run unit tests
+name: Build Python package
 
-on: 
-    push:
-        branches:
-            - main
-            - develop
+on:
+   workflow_call:
 
 jobs:
-    # Run unit tests
-    test:
+    build:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -19,8 +15,12 @@ jobs:
             - name: Install dependencies
               run: |
                 python -m pip install -U pip
-                pip install .[test]
-            - name: Run tests
+                pip install -U setuptools wheel
+            - name: Build package
               run: |
-                pytest
-    
+                python setup.py sdist bdist_wheel
+            - name: Upload package
+              uses: actions/upload-artifact@v4
+              with:
+                name: package
+                path: dist/
