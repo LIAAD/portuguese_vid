@@ -41,6 +41,10 @@ class Plot:
                 p_pos = list(set([result['p_pos'] for result in results[dataset_name]]))
                 p_ner = list(set([result['p_ner'] for result in results[dataset_name]]))
 
+                # Sort the values
+                p_pos.sort()
+                p_ner.sort()
+
                 fig = px.imshow(
                     Plot._extract_data(results[dataset_name], metric, p_pos, p_ner),
                     labels=dict(x="p_pos", y="p_ner", color=metric),
@@ -48,6 +52,8 @@ class Plot:
                     y=p_ner,
                     text_auto=True,
                 )
+
+                fig.update_yaxes(autorange="reversed")
 
                 figs.append(fig)
 
