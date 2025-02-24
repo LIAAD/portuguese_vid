@@ -1,0 +1,26 @@
+{
+    "politics": {
+        "min_chars": 100,
+        "max_chars": 3000
+    },
+    "journalistic": {
+        "min_chars": 100,
+        "max_chars": 1500
+    },
+    "legal": {
+        "min_chars": 100,
+        "max_chars": 1500
+    },
+    "literature": {
+        "min_chars": 100,
+        "max_chars": 1500
+    },
+    "social_media": {
+        "min_chars": 10,
+        "max_chars": 1000
+    },
+    "web": {
+        "min_chars": 100,
+        "max_chars": 5000
+    }
+}
