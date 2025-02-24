@@ -8,3 +8,13 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install -U pip
+
+RUN pip install -U pt-vid[demo]
+
+RUN pip install -U spacy
+
+COPY . .
+
+EXPOSE 80
+
+ENTRYPOINT ["fastapi", "run", "main.py", "--host=0.0.0.0", "--port=80"]

@@ -11,13 +11,13 @@ print(f"Run on {torch.cuda.get_device_name()}")
 app = FastAPI()
 
 @app.on_event("startup")
-async def load_pipeline():
+def load_pipeline():
     torch.cuda.empty_cache()    
     app.delexicalized_pipeline = pipeline("text-classification", model="liaad/PtVId")
     app.delexicalizer = Delexicalizer(prob_pos_tag=0.6, prob_ner_tag=0.0)
 
 @app.on_event("shutdown")
-async def delete_pipeline():
+def delete_pipeline():
     del app.delexicalized_pipeline
     del app.delexicalizer
 
