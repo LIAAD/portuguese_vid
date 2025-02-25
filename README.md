@@ -128,11 +128,14 @@ It is expected that any future contributions adhere to the foundations establish
 If you use this repository in your research, please consider citing our work:  
 
 ```bibtex
-@inproceedings{your2025paper,
-  title={Enhancing Portuguese Variety Identification with Cross-Domain Approaches},
-  author={Your, Name and Collaborators},
-  booktitle={AAAI 2025 Conference},
-  year={2025}
+@misc{sousa2025enhancingportuguesevarietyidentification,
+      title={Enhancing Portuguese Variety Identification with Cross-Domain Approaches}, 
+      author={Hugo Sousa and Rúben Almeida and Purificação Silvano and Inês Cantante and Ricardo Campos and Alípio Jorge},
+      year={2025},
+      eprint={2502.14394},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2502.14394}, 
 }
 ```  
 
