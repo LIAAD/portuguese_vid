@@ -1,4 +1,4 @@
-thrash/*
+*.joblib
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode
@@ -200,7 +200,7 @@ data/others.py
 *.csv
 *.dtd
 
-data/
+data/*
 
 .vscode
 

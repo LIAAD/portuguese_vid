@@ -1,0 +1,33 @@
+services:
+  streamlit:
+    build: 
+      context: ./demo
+      dockerfile: dev.Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - ENDPOINT=http://fast-api/detect
+    networks:
+      - vid
+
+  fast-api:
+    container_name: fast-api
+    build: 
+      context: ./endpoint
+      dockerfile: dev.Dockerfile
+    ports:
+      - "8000:80"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+    networks:
+      - vid
+
+networks:
+  vid:
+    driver: bridge
