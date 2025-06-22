@@ -125,19 +125,21 @@ It is expected that any future contributions adhere to the foundations establish
 
 ## Citation  
 
-If you use this repository in your research, please consider citing our work:  
-
-```bibtex
-@misc{sousa2025enhancingportuguesevarietyidentification,
-      title={Enhancing Portuguese Variety Identification with Cross-Domain Approaches}, 
-      author={Hugo Sousa and Rúben Almeida and Purificação Silvano and Inês Cantante and Ricardo Campos and Alípio Jorge},
-      year={2025},
-      eprint={2502.14394},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2502.14394}, 
+If you use this model in your work, please cite the following paper:
+```
+@article{Sousa2025,
+   author = {Hugo Sousa and Rúben Almeida and Purificação Silvano and Inês Cantante and Ricardo Campos and Alipio Jorge},
+   doi = {10.1609/aaai.v39i24.34705},
+   issn = {2374-3468},
+   issue = {24},
+   journal = {Proceedings of the AAAI Conference on Artificial Intelligence},
+   month = {4},
+   pages = {25192-25200},
+   title = {Enhancing Portuguese Variety Identification with Cross-Domain Approaches},
+   volume = {39},
+   year = {2025}
 }
-```  
+```
 
 ---
 
